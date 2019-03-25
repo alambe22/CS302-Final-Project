@@ -1,0 +1,9 @@
+Personal Rubric:
+
+10 points: Implement an array containing different types of terrain
+10 points: Implement an array containing different types of weather
+10 points: Implement visibility for each type of terrain and weather
+10 points: Start to implement functions for obtaining the visibility
+
+Time Logs:
+03/25/2019	
