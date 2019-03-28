@@ -6,7 +6,7 @@
 using namespace std;
 
 int main(){
-	srand(5);
+	srand(6);
 	Map m;
 	m.resize(25, 25);
 	m.print();
