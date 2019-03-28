@@ -1,14 +1,15 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>
 #include "Map.h"
 
 using namespace std;
 
 int main(){
-	Map m("medium");
-	m.setTime("night");
-	m.setWeather("hail");
+	srand(5);
+	Map m;
+	m.resize(25, 25);
 	m.print();
-	m.changeTime();
+	m.resize(15, 15);
 	m.print();
 }

@@ -4,17 +4,16 @@
 using namespace std;
 
 class Map{
-	int r,c,w,t;													//rows, cols, weather index, time index, random map offset
+	int r,c,w,t;														//rows, cols, weather index, time index
 	const string weathers[7] = {"sunny", "cloudy", "windy", "rainy", "snowy", "foggy", "hail"};
 	const char terrains[5] = {'O', 'D', 'P', 'F', 'M'};					//ocean, desert, plains, forrest, mountain
 	const string times[2] = {"day", "night"};
-	double x,y,z,offset;
+	double xseed, yseed, zseed;
 	PerlinNoise *pn;
-	void generateMap(PerlinNoise *pn);
+	void generateMap(PerlinNoise &pn);
 
 public:
-	Map();																//Initializes values with nothing
-	~Map();
+	Map();																//Initializes values with nothing									
 	vector< vector<char> > map;											//the map
 	void resize(int r, int c);											//resize and reconstruct the map with r, c cols
 	int rows() const {return r;}										//the number of rows
