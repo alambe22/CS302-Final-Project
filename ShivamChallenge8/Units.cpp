@@ -9,7 +9,7 @@ using namespace std;
 Sniper::Sniper(){
 	this->health = 2500;
 	this->damage = 550;
-	this->range = 10;
+	this->range = 7;
 }
 
 int Sniper::getHealth(){return health;}
@@ -59,7 +59,7 @@ void Infantry::print(){
 //*****UNIT -----> CAVALRY*******
 Cavalry::Cavalry(int rowsize){
 	this->health = 4000;
-	this->damage = 375;
+	this->damage = 200;
 	this->range = rowsize;
 }
 
@@ -72,9 +72,27 @@ int Cavalry::getRange(){return range;}
 void Cavalry::print(){
 	cout<<"Cavalry Status:"<<endl<<"health: "<<health<<endl<<"damage: "<<damage<<endl<<"range: "<<range<<endl;
 }
+
+//*****UNIT -----> HOPPER*******
+Hopper::Hopper(){
+	this->health = 1500;
+	this->damage = 425;
+	this->range = 1;
+}
+
+int Hopper::getHealth(){return health;}
+
+int Hopper::getDamage(){return damage;}
+
+int Hopper::getRange(){return range;}
+
+void Hopper::print(){
+	cout<<"Hopper Status:"<<endl<<"health: "<<health<<endl<<"damage: "<<damage<<endl<<"range: "<<range<<endl;
+}
+
 int main(){
-	Cavalry c(35);
-	Unit *unit1 = &c;	
+	Hopper h;
+	Unit *unit1 = &h;	
 	int health=	unit1->getHealth();	
 	int damage = unit1->getDamage();
 	int range = unit1->getRange();

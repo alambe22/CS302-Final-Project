@@ -12,8 +12,8 @@ class Unit{
 		virtual int getRange()  =0;
 		virtual int getDamage() =0;
 		virtual void print()    =0;
-//		virtual void move()     =0;
-//		virtual void attack()   =0;
+//		virtual void move(vector<vector<char>>&grid, int numtiles)     =0;
+//		virtual void attack(int visibility)   =0;
 	
 
 };
@@ -78,5 +78,21 @@ class Cavalry : public Unit{
 		int damage;
 		int range;
 };
+
+class Hopper : public Unit{
+	public:	
+		int getHealth();
+		int getRange();
+		int getDamage();
+		void print();
+		void move();
+		void attack();
+		Hopper();
+	private:
+		int health;
+		int damage;
+		int range;
+};
+
 
 
