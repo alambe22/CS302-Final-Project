@@ -1,0 +1,20 @@
+Repository Link: https://github.com/alambe22/CS302-Final-Project.git
+
+Weekly Rubric:
+10 points: figure out all the units I will be using  
+10 points: decide on the attack, damage, health, range, weapon
+10 points: make a class and several other virtual classes for each unit 
+10 points: start on making the move, attack functions
+
+
+
+Time log:
+
+Date		Minutes				Description
+----------------------------------------------
+3/26		45					Reviewing over inheritance and pure virtual functions
+3/27	    100					Deciding on the units and its atributes
+3/27		180					Creating the classes for each of the units and setting up the functions and testing getter ones
+3/28		180					Working on the move function for a unit and testing
+
+Summary:
