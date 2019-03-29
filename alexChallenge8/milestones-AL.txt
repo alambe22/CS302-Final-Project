@@ -45,3 +45,12 @@ is the "tying it all together" part of the project.
 
 Git link:
 https://github.com/alambe22/CS302-Final-Project
+
+Note: This git is the git for our project, mine is under the file alexChallenge8
+
+Future Goals:
+1. Switch to Casey and Shivam's libraries.
+2. Get unit movement and attacking working
+3. Error Checking
+4. Pass information from Casey and Shivam's libraries to Tom's graphics library.
+5. Input victory conditions and bug test.
