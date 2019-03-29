@@ -1,4 +1,5 @@
-// Description: Implementing the units and its attacks 
+// Name: Shivam Patel
+// Description: Defined the getter functions and print  
 
 
 using namespace std;
@@ -109,10 +110,3 @@ void Biker::print(){
 	cout<<"Biker Status:"<<endl<<"health: "<<health<<endl<<"damage: "<<damage<<endl<<"range: "<<range<<endl;
 }
 
-int main(){
-	Base b;
-	Unit *unit1 = &b;	
-	unit1->print();
-	return 0;
-
-}//end of main
