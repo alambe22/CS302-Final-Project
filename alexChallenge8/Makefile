@@ -2,8 +2,8 @@ CXX=	  g++
 CXXFLAGS= -g -Wall -std=gnu++11
 LDFLAGS=
 SHELL=	  bash
-PROGRAMS= challenge8
-SOURCES= solution.cpp map.cpp unit.cpp graphics.cpp
+PROGRAMS= solution
+SOURCES= solution.cpp map.cpp Unit.cpp
 OBJECTS= $(SOURCES:.cpp=.o)
 
 all:	 $(PROGRAMS)
