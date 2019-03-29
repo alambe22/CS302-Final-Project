@@ -1,16 +1,26 @@
+//Final Project: SDL portion
+
 //Tom Hills (jhills)
 
 //
 
-//#include <iostream>
 #include <cstdlib>
 #include <cstdio>
-#include <SDL2/SDL.h> //g++ -w -lSDL2 -o challenge08 challenge08.cpp
+#include <string>
+#include <SDL2/SDL.h> //compile: g++ -w -lSDL2 -o challenge08 challenge08.cpp
+#include <SDL2/SDL_image.h>
+
+using namespace std;
 
 //GLOBALS--------------------------------------------------------------------------------------------------------------------
+//NOTE: These globals are temporary placeholders until I get past lazyfoo tutorials
+
 //screen dimension constants
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
+
+//test image path
+string path = "Images/GIGER.bmp";
 
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
@@ -21,11 +31,18 @@ SDL_Surface* gScreenSurface = NULL;
 //The image we will load and show on the screen
 SDL_Surface* gImage = NULL;
 
+//Loads individual image as texture
+//SDL_Texture* loadTexture( path );
+
+//The window renderer
+SDL_Renderer* gRenderer = NULL;
+
+//Current displayed texture
+SDL_Texture* gTexture = NULL;
+
+//FUNCTIONS-----------------------------------------------------------------------------------------------------------------
 bool init()
 {
-    //Initialization flag
-//    bool success = true;
-
 	//Initialize SDL 
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) 
 	{ 
@@ -48,31 +65,71 @@ bool init()
         {
             //Get window surface
             gScreenSurface = SDL_GetWindowSurface( gWindow );
+
+			//Initialize renderer color
+			SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+
+			//NOTE: These don't work yet b/c I haven't converted to PNG image format yet in other code
+			//...need to figure out what image format I'm going to use.
+//			//Initialize PNG loading
+//			int imgFlags = IMG_INIT_PNG;
+//			
+//			if( !( IMG_Init( imgFlags ) & imgFlags ) )
+//			{
+//				printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+//				return false;
+//			}	
         }
 	}
     
-//
-////    return success;
 	return true;
 }
 
+//converts image to screen format to avoid a convert for every blit call
+SDL_Surface* loadSurface( string &path )
+{
+	//The final optimized image
+	SDL_Surface* optimizedSurface = NULL;
+
+	//Load image at specified path
+	SDL_Surface* loadedSurface = SDL_LoadBMP( path.c_str() );
+	
+	if( loadedSurface == NULL )
+	{
+		printf( "Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+	}
+	
+	else
+	{
+		//Convert surface to screen format. NOTE: SDL_ConvertSurface returns a copy of "loadedSurface"
+		optimizedSurface = SDL_ConvertSurface( loadedSurface, gScreenSurface->format, NULL );
+		
+		if( optimizedSurface == NULL )
+		{
+			printf( "Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+		}
+
+		//Get rid of old loaded surface (optimizedSurface is a COPY of this old surface as returned by SDL_ConvertSurface)
+		SDL_FreeSurface( loadedSurface );
+	}
+
+	return optimizedSurface;
+}
 
 bool loadMedia()
 {
-    //Loading success flag
-//    bool success = true;
+	//The final optimized image
+	SDL_Surface* optimizedSurface = NULL;
 
-    //Load splash image
-    gImage = SDL_LoadBMP( "Images/GIGER.bmp" );
+    //Load image at specified path
+    gImage = loadSurface( path );
     
 	if( gImage == NULL )
     {
         printf( "Unable to load image %s! SDL Error: %s\n", "Tom/Images/GIGER.bmp", SDL_GetError() );
 		return false;
-//        success = false;
     }
 
-//    return success;
 	return true;
 }
 
@@ -106,14 +163,31 @@ int main (int argc, char *args[])
         }
         else
         {
-            //Apply the image
-            SDL_BlitSurface( gImage, NULL, gScreenSurface, NULL );
+			//game loop boolean
+			bool quit = false;
 
-			//Update the surface
-            SDL_UpdateWindowSurface( gWindow );
+			//Event handler
+			SDL_Event event;
            
-			//Wait two seconds
-            SDL_Delay( 5000 );
+			//game loop
+			while ( !quit )
+			{
+				//Handle events on queue
+                while( SDL_PollEvent( &event ) != 0 )
+                {
+                    //User requests quit
+                    if( event.type == SDL_QUIT )
+                    {
+                        quit = true;
+                    }
+                }
+			
+				//Apply the image
+				SDL_BlitSurface( gImage, NULL, gScreenSurface, NULL );
+
+				//Update the surface
+				SDL_UpdateWindowSurface( gWindow );
+			}
         }
     }
 
