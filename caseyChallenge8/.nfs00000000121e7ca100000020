@@ -4,11 +4,11 @@
 using namespace std;
 
 class Map{
-	int r,c,w,t;													//rows, cols, weather index, time index, random map offset
+	int r,c,w,t;														//rows, cols, weather index, time index
 	const string weathers[7] = {"sunny", "cloudy", "windy", "rainy", "snowy", "foggy", "hail"};
 	const char terrains[5] = {'O', 'D', 'P', 'F', 'M'};					//ocean, desert, plains, forrest, mountain
 	const string times[2] = {"day", "night"};
-	double x,y,z,offset;
+	double x,y,z;
 	PerlinNoise *pn;
 	void generateMap(PerlinNoise *pn);
 
