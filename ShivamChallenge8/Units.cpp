@@ -5,6 +5,25 @@ using namespace std;
 #include "Units.h"
 #include <iostream>
 
+//*****UNIT -----> BASE*******
+
+Base::Base(){
+	this->health = 20000;
+	this->damage = 0;
+	this->range = 0;
+}
+
+int Base::getHealth(){return health;}
+
+int Base::getDamage(){return damage;}
+
+int Base::getRange(){return range;}
+
+void Base::print(){
+	cout<<"Base Status:"<<endl<<"health: "<<health<<endl;
+}
+
+
 //*****UNIT -----> SNIPER*******
 Sniper::Sniper(){
 	this->health = 2500;
@@ -73,29 +92,26 @@ void Cavalry::print(){
 	cout<<"Cavalry Status:"<<endl<<"health: "<<health<<endl<<"damage: "<<damage<<endl<<"range: "<<range<<endl;
 }
 
-//*****UNIT -----> HOPPER*******
-Hopper::Hopper(){
+//*****UNIT -----> BIKER*******
+Biker::Biker(){
 	this->health = 1500;
 	this->damage = 425;
 	this->range = 1;
 }
 
-int Hopper::getHealth(){return health;}
+int Biker::getHealth(){return health;}
 
-int Hopper::getDamage(){return damage;}
+int Biker::getDamage(){return damage;}
 
-int Hopper::getRange(){return range;}
+int Biker::getRange(){return range;}
 
-void Hopper::print(){
-	cout<<"Hopper Status:"<<endl<<"health: "<<health<<endl<<"damage: "<<damage<<endl<<"range: "<<range<<endl;
+void Biker::print(){
+	cout<<"Biker Status:"<<endl<<"health: "<<health<<endl<<"damage: "<<damage<<endl<<"range: "<<range<<endl;
 }
 
 int main(){
-	Hopper h;
-	Unit *unit1 = &h;	
-	int health=	unit1->getHealth();	
-	int damage = unit1->getDamage();
-	int range = unit1->getRange();
+	Base b;
+	Unit *unit1 = &b;	
 	unit1->print();
 	return 0;
 

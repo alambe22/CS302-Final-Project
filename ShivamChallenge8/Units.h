@@ -33,6 +33,21 @@ class Sniper : public Unit{
 		int range;
 };
 
+class Base : public Unit{
+	public:
+		int getHealth();
+		int getRange();
+		int getDamage();
+		void print();
+		void move();
+		void attack();
+		Base();
+	private:
+		int health;
+		int damage;
+		int range;
+};
+
 class Artillery : public Unit{
 	public:	
 		int getHealth();
@@ -79,7 +94,7 @@ class Cavalry : public Unit{
 		int range;
 };
 
-class Hopper : public Unit{
+class Biker : public Unit{
 	public:	
 		int getHealth();
 		int getRange();
@@ -87,7 +102,7 @@ class Hopper : public Unit{
 		void print();
 		void move();
 		void attack();
-		Hopper();
+		Biker();
 	private:
 		int health;
 		int damage;
