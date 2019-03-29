@@ -24,4 +24,24 @@ Time Logs
 3/28/19
 	9:30-10:30 1 hour
 	On and off throughout the day: 1.5 hours
-	9
+	9:00-11:00 3 hours
+3/29/19
+	10:00-12:00 2 hours
+	2-4 2 hours
+
+Total time: 12 hours Roughly
+
+Goals Completed:
+1, 2, and 3.
+
+Report:
+This challenge ended up being much more of an undertaking than I expected. I think this is mostly
+due to the fact that I had to write a miniature version of our project in order to
+practice combining our project into one working program. Goal 4 will have to be moved
+to a "next step" because trying to properly handle movements with error checking will
+take a fair bit of work. Overall, I think things will not be as bad moving ahead
+given I wont have to write an entire program just to test my part of the project,which
+is the "tying it all together" part of the project.
+
+Git link:
+https://github.com/alambe22/CS302-Final-Project
