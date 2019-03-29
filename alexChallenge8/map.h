@@ -1,3 +1,5 @@
+//Header file for map library. Stores gameboard and relevant information.
+
 #include <vector>
 #include <string>
 using namespace std;
