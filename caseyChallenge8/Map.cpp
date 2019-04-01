@@ -9,11 +9,30 @@ void Map::generateMap(PerlinNoise *pn){
 			x = (double)j/((double)c) + offset;
 			y = (double)i/((double)r) + offset;
 			value = pn->noise(x*3.0, y*3.0, z);
-			if (value < 0.3)
+			/*if (value < 0.3)
 				map[i][j] = terrains[0];
 			else if (value < 0.4)
 				map[i][j] = terrains[1];
 			else if (value < 0.5)
+				map[i][j] = terrains[2];
+			else if (value < 0.7)
+				map[i][j] = terrains[3];
+			else
+				map[i][j] = terrains[4];
+			*/
+			if(value < 0.2)
+				map[i][j] = terrains[4];
+			else if(value < 0.3)
+				map[i][j] = terrains[3];
+			else if (value < 0.4)
+				map[i][j] = terrains[2];
+			else if (value < 0.45)
+				map[i][j] = terrains[1];
+			else if (value < 0.5)
+				map[i][j] = terrains[0];
+			else if (value < 0.55)
+				map[i][j] = terrains[1];
+			else if (value < 0.6)
 				map[i][j] = terrains[2];
 			else if (value < 0.7)
 				map[i][j] = terrains[3];
@@ -31,7 +50,7 @@ Map::Map(){
 	y = 0;
 	z = drand48();
 	offset = drand48();
-	pn = new PerlinNoise();
+	pn = new PerlinNoise(rand());
 }
 Map::~Map(){
 	delete pn;
