@@ -24,7 +24,6 @@ class Player{
 		string name;
 		Base hq;
 		unordered_map<int, Unit*> units;
-
 };
 
 Player::Player(){
@@ -33,16 +32,18 @@ Player::Player(){
 
 //Helper functions to make cleaner code
 int startGame(Map& gameboard, Player* players);
-void printMap(vector<vector<char> >& unitGrid, Map& gameboard);
 
 int main(int argc, char* argv[]){
-	int choice, curPlayer;
-	unsigned int turnCounter=0, row, col;
-	bool unitBought=false;
-	
+	int choice, curPlayer, start;
+	unsigned int turnCounter=0;
+	bool unitBought=false, allMoved=false;
+	unordered_map<int, Unit*>::iterator it;
+	pair<int, int> des;
+	vector<vector<bool> > unitGrid(15, vector<bool>(15));
+
 	// Start menu
 	do{
-		cout << "Chess But Cooler\n  1. Play\n  2. Exit\n";
+		cout << "Chess, But Cooler\n  1. Play\n  2. Exit\n";
 		cin >> choice;
 	}while(choice >2 && choice <1);
 	if(choice == 2) return 0;
@@ -51,64 +52,50 @@ int main(int argc, char* argv[]){
 	
 	Player players[2];
 
-	//This unit grid allows for quick printing of the units on the map
-	//alongside the terrain tiles.
-	vector<vector<char> > unitGrid(15, vector<char>(15, '_'));
-	
-	//There is only one map size for testing. Here the bases are added to the map
-	unitGrid[7][0] = 'b';
-	unitGrid[7][14] ='b';
-
 	curPlayer = startGame(gameboard, players);
-	printMap(unitGrid, gameboard);
-
+	
+	gameboard.print();
 	//This is the main game loop. As long as the player does not
 	//choose "6" the game will keep running. Eventually this will be
 	//tied to victory conditions as well
 	while(true){
 		cout << players[curPlayer].name << "\'s turn\n";
-		
+
 		cout << "Options: 1. Move Units\n 2. Buy unit\n 3. Check tile\n 4. End turn\n 5. Reprint Map\n 6. Quit\n Choice: ";
 		cin >> choice;
 
 		//Menu
 		switch(choice){
+			// Move units
 			case 1:
-				if(!unitsMoved){
-					if(curTurn){
-						moveUnit(p2Units, unitGrid);
-					}else{
-						moveUnit(p1Units, unitGrid);
+				if(!allMoved){
+					for(it = players[curPlayer].units.begin(); it!=players[curPlayer].units.end();it++){
+						cout << "Enter unit " << (*it)->first "\'s destination (row, col): ";
+						cin >> des.first >> des.second;
+						(*it)->move(src, des, 15, 15);
 					}
-					printMap(unitGrid, gameboard);
-					unitsMoved=true;
+					allMoved=true;
 				}else{
 					cout << "All units already moved this turn\n";
 				}
+				gameboard.print();
 				break;
-			// Buys a new unit. Currently player can only
-			// do this once as they cannot move the new unit away
-			// from the spawn point
 			case 2:
 				if(!unitBought){
 					//Figure out which base and unit map to add to
-					if(curTurn){
-						if(unitGrid[7][13] == '_'){
-							p2Units.emplace(idP2,new Infantry(7,13));
-							unitGrid[7][13] = 'i';
-							idP2++;
-						}else{
-							cout << "Space in front of base already occupied. Please move unit first\n";
-						}
-					}else{
-						if(unitGrid[7][1] == '_'){
-							p1Units.emplace(idP1, new Infantry(7,13));
-							unitGrid[7][1]= 'i';
-							idP1++;
-						}else{
-							cout << "Space in front of base already occupied. Please move unit first\n";
-						}
+					cout << "\nOptions:\n 1. Sniper\n 2. Artillery\n 3. Infantry\n 4. Cavalry\n 5. Biker\n 6. Cancel\n Choice: ";
+					cin >> choice;
+					
+					cout << "\nStarting Row In Base Column: ";
+					do{
+						cin >> start;
+						if(!unitGrid() break;
+					while(true);
+					switch(choice){
+						case 1:
+
 					}
+					
 					unitBought = true;
 				}else{
 					cout << "Unit already bought this turn.\n";
