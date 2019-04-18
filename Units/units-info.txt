@@ -28,7 +28,7 @@ CAVALRY
 -Movement: 1 tiles up or down
 -Attack: can damage any unit that is in the same row cavalry is in
 -Health: 4000
--Damage: 200 to each unit in that row
+-Damage: 350 to any singular unit in that row
 -Range: length of row
 
 HOPPER
