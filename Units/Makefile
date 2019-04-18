@@ -1,7 +1,10 @@
 
 
+
 all: test
 
+run: test
+	@./test
 test: test.o Units.o
 	g++ -o test test.o Units.o
 

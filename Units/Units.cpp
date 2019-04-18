@@ -24,9 +24,9 @@ int Base::getDamage(){return damage;}
 
 pair<int,int> Base::getPosition(){return pos;}
 
-void Base::move(pair<int,int>pos, pair<int,int> des, int row, int col){
-
+bool Base::move(pair<int,int> des, int row, int col){
 	printf("The base does not move at any point in the game\n");
+	return false;
 }
 
 void Base::print(){
@@ -50,12 +50,12 @@ int Sniper::getRange(){return range;}
 
 pair<int,int> Sniper::getPosition(){return pos;}
 
-void Sniper::move(pair<int,int> pos, pair<int,int>des, int row, int col){
+bool Sniper::move(pair<int,int>des, int row, int col){
 	bool valid = false;
 
 	if(des.first <0 || des.first >=row || des.second<0 || des.second >=col){
 		printf("Invalid Move! You went out of bounds!\n");
-		exit(1);
+		return false;
 	}
 
 	int rowdiff = abs(des.first - pos.first);
@@ -68,15 +68,15 @@ void Sniper::move(pair<int,int> pos, pair<int,int>des, int row, int col){
 
 	if(valid == false){
 		printf("Sniper cannot move to that destination. Sniper moves 1 tile in any direction\n");
-		exit(1);
+		return false;
 	}
 	
 	//update the unit's current position to the destination postion
 	else{
-		this->pos.first = des.first;
-		this->pos.second = des.second;
+		pos.first = des.first;
+		pos.second = des.second;
 	}
-	cout<<this->pos.first<<","<<this->pos.second<<endl;
+	return true;
 }
 
 void Sniper::print(){
@@ -100,12 +100,12 @@ int Artillery::getRange(){return range;}
 
 pair<int,int> Artillery::getPosition(){return pos;}
 
-void Artillery::move(pair<int,int> pos, pair<int,int> des, int row, int col){
+bool Artillery::move(pair<int,int> des, int row, int col){
 	bool valid = false;
 
 	if(des.first <0 || des.first >=row || des.second<0 || des.second >=col){
 		printf("Invalid Move! You went out of bounds!\n");
-		exit(1);
+		return false;
 	}
 
 
@@ -117,12 +117,13 @@ void Artillery::move(pair<int,int> pos, pair<int,int> des, int row, int col){
 
 	if(valid ==false){
 		printf("Invalid move! Artillery moves 3 tiles at time in any adjacent direction to current position.\n");
-		exit(1);
+		return false;
 	}
 	else{
-		this->pos.first = des.first;
-		this->pos.second = des.second;
+		pos.first = des.first;
+		pos.second = des.second;
 	}
+	return true;
 }
 
 void Artillery::print(){
@@ -146,12 +147,12 @@ int Infantry::getRange(){return range;}
 
 pair<int,int> Infantry::getPosition() {return pos;}
 
-void Infantry::move(pair<int,int> pos, pair<int,int>des, int row, int col){
+bool Infantry::move(pair<int,int>des, int row, int col){
 	bool valid = false;
 
 	if(des.first <0 || des.first >=row || des.second<0 || des.second >=col){
 		printf("Invalid Move! You went out of bounds!\n");
-		exit(1);
+		return false;
 	}
 
 	int rowdiff = abs(des.first - pos.first);
@@ -163,15 +164,15 @@ void Infantry::move(pair<int,int> pos, pair<int,int>des, int row, int col){
 
 	if(valid == false){
 		printf("Invalid destination. Infantry only goes 1 tiles adjacent to its current position\n");
-		exit(1);
+		return false;
 	}
 	
 	//update the unit's current position to the destination postion
 	else{
-		this->pos.first = des.first;
-		this->pos.second = des.second;
+		pos.first = des.first;
+		pos.second = des.second;
 	}
-
+		return true;
 }
 
 
@@ -196,30 +197,31 @@ int Cavalry::getRange(){return range;}
 
 pair<int,int> Cavalry::getPosition() {return pos;}
 
-void Cavalry::move(pair<int,int> pos, pair<int,int>des, int row, int col){
+bool Cavalry::move(pair<int,int>des, int row, int col){
 	bool valid = false;
 	if(des.first <0 || des.first >=row || des.second<0 || des.second >=col){
 		printf("Invalid Move! You went out of bounds!\n");
-		exit(1);
+		return false;
 	}
 
 	int rowdiff = abs(des.first - pos.first);
 	int coldiff = abs(des.second - pos.second);
 	//valid moves
-	if(rowdiff ==1 && coldiff ==0) valid = true;
+	if(rowdiff ==0 && coldiff ==1) valid = true;
 
 	if(valid == false){
-		printf("Invalid destination. Cavalry only goes 1 tile above or below its current position\n");
-		exit(1);
+		printf("Invalid destination. Cavalry only goes 1 tile left or right its current position\n");
+		return false;
 	}
 	
 	//update the unit's current position to the destination postion
 	else{
-		this->pos.first = des.first;
-		this->pos.second = des.second;
+		pos.first = des.first;
+		pos.second = des.second;
 	}
-	cout<<this->pos.first<<","<<this->pos.second<<endl;
+		return true;
 }
+
 
 
 void Cavalry::print(){
@@ -242,12 +244,12 @@ int Biker::getRange(){return range;}
 
 pair<int,int> Biker::getPosition(){return pos;}
 
-void Biker::move(pair<int,int> pos, pair<int,int>des, int row, int col){
+bool Biker::move(pair<int,int>des, int row, int col){
 	bool valid = false;
 
 	if(des.first <0 || des.first >=row || des.second<0 || des.second >=col){
 		printf("Invalid Move! You went out of bounds!\n");
-		exit(1);
+		return false;
 	}
 
 	int rowdiff = abs(des.first - pos.first);
@@ -255,7 +257,7 @@ void Biker::move(pair<int,int> pos, pair<int,int>des, int row, int col){
 
 	if(rowdiff ==0 && coldiff ==0){
 		printf("Destination is same as current position\n");
-		exit(1);
+		return false;
 	}
 	
 	//valid moves
@@ -265,15 +267,15 @@ void Biker::move(pair<int,int> pos, pair<int,int>des, int row, int col){
 	
 	if(valid == false){
 		printf("Invalid destination. Biker goes up to 8 tiles in any direction from its current position\n");
-		exit(1);
+		return false;
 	}
 	
 	//update the unit's current position to the destination postion
 	else{
-		this->pos.first = des.first;
-		this->pos.second = des.second;
+		pos.first = des.first;
+		pos.second = des.second;
 	}
-
+		return true;
 }
 
 void Biker::print(){

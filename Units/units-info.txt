@@ -25,13 +25,13 @@ INFANTRY
 -Range: 1 tile diagonal from its current position
 
 CAVALRY
--Movement: 1 tiles up or down
+-Movement: 1 tiles left or right
 -Attack: can damage any unit that is in the same row cavalry is in
 -Health: 4000
 -Damage: 350 to any singular unit in that row
 -Range: length of row
 
-HOPPER
+BIKER
 -Movement: move up to 8 tiles any  direction including diagonal
 -Attack: any adjacent direction 1 tile away
 -Health: 1500

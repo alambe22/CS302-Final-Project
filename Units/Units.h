@@ -12,7 +12,7 @@ class Unit{
 		virtual int getDamage() =0;
 		virtual pair<int,int> getPosition() =0;
 		virtual void print()    =0;
-		virtual void move(pair<int,int>, pair<int,int>, int,int) =0; //current position, destination position, rowsize, column size
+		virtual bool move(pair<int,int>, int,int) =0; //destination position, rowsize, column size
 //		virtual void attack(int visibility)   =0; //current position, destination position, visibility
 
 	
@@ -26,7 +26,7 @@ class Base : public Unit{
 		pair<int,int> getPosition();
 		int getDamage();
 		void print();
-		void move(pair<int,int>, pair<int,int>, int, int);
+		bool move(pair<int,int>, int, int);
 		void attack();
 		Base(int,int);
 	private:
@@ -43,7 +43,7 @@ class Sniper : public Unit{
 		pair<int,int> getPosition();
 		int getDamage();
 		void print();
-		void move(pair<int,int>, pair<int,int>, int, int);
+		bool move(pair<int,int>, int, int);
 		void attack();
 		Sniper(int , int);
 	private:
@@ -60,7 +60,7 @@ class Artillery : public Unit{
 		int getDamage();
 		pair<int,int> getPosition();
 		void print();
-		void move(pair<int,int>, pair<int,int>, int , int);
+		bool move(pair<int,int>, int , int);
 		void attack();
 		Artillery(int row,int col);
 	private:
@@ -77,7 +77,7 @@ class Infantry : public Unit{
 		int getDamage();
 		pair<int,int> getPosition();
 		void print();
-		void move(pair<int,int>, pair<int,int>, int, int);
+		bool move(pair<int,int>, int, int);
 		void attack();
 		Infantry(int row, int col);
 	private:
@@ -95,9 +95,9 @@ class Cavalry : public Unit{
 		int getDamage();
 		pair<int,int> getPosition();
 		void print();
-		void move(pair<int,int>, pair<int,int>, int, int);
+		bool move(pair<int,int>, int, int);
 		void attack();
-		Cavalry(int row, int col, int rowsize);
+		Cavalry(int row, int col, int columnSize);
 	private:
 		pair<int,int>pos;
 		int health;
@@ -112,7 +112,7 @@ class Biker : public Unit{
 		int getDamage();
 		pair<int,int> getPosition();
 		void print();
-		void move(pair<int,int>, pair<int,int>, int, int);
+		bool move(pair<int,int>, int, int);
 		void attack();
 		Biker(int row, int col);
 	private:
