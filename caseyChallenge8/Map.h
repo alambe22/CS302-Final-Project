@@ -27,5 +27,5 @@ public:
 	int setTime(string time);											//set the time
 	void changeTime();													//change the time
 	int visibility(int row, int col) const;								//the visibility at position row, col
-	void print();
+	void print(vector< vector<char> > &units);
 };

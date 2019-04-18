@@ -92,12 +92,20 @@ int Map::setTime(string time){
 void Map::changeTime(){
 	t = !t;
 }
-void Map::print(){
+void Map::print(vector< vector<char> > &units){
 	cout << "Weather: " << weathers[w] << endl;
 	cout << "Time: " << times[t] << endl;
+	string str;
 	for(int i = 0; i < r; i++){
 		for(int j = 0; j < c; j++){
-			cout << map[i][j] << " ";
+			switch(map[i][j]){
+				case 'O': str = "\e[34m"; break;
+				case 'D': str = "\e[93m"; break;
+				case 'P': str = "\e[92m"; break;
+				case 'F': str = "\e[32m"; break;
+				case 'M': str = "\e[90m"; break;
+			}
+			cout << str + map[i][j] + units[i][j] << " ";
 		}
 		cout << endl;
 	}
