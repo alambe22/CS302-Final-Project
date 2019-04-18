@@ -14,6 +14,7 @@ Base::Base(int row, int col){
 	this->range = 0;
 	this->damage = 0;
 	this->pos = make_pair(row,col);
+	this->moveCheck = false;
 }
 
 int Base::getHealth(){return health;}
@@ -24,10 +25,20 @@ int Base::getDamage(){return damage;}
 
 pair<int,int> Base::getPosition(){return pos;}
 
+bool Base:: getMove(){return moveCheck;}
+
+void Base:: setMove(bool set){moveCheck = set;}
+
 bool Base::move(pair<int,int> des, int row, int col){
 	printf("The base does not move at any point in the game\n");
 	return false;
 }
+
+bool Base::attack(pair<int,int> des, int visibility, Unit*){
+	printf("The base does not attack at any point in the game\n");
+	return false;
+}
+
 
 void Base::print(){
 	printf("Base Status: \nhealth: %d\nPosition: %d,%d\n", health, pos.first, pos.second);
@@ -40,6 +51,7 @@ Sniper::Sniper(int row, int col){
 	this->damage = 550;
 	this->range = 7;
 	this->pos = make_pair(row,col);
+	this->moveCheck = false;
 }
 
 int Sniper::getHealth(){return health;}
@@ -49,6 +61,10 @@ int Sniper::getDamage(){return damage;}
 int Sniper::getRange(){return range;}
 
 pair<int,int> Sniper::getPosition(){return pos;}
+
+bool Sniper:: getMove(){return moveCheck;}
+
+void Sniper:: setMove(bool set){moveCheck = set;}
 
 bool Sniper::move(pair<int,int>des, int row, int col){
 	bool valid = false;
@@ -79,10 +95,15 @@ bool Sniper::move(pair<int,int>des, int row, int col){
 	return true;
 }
 
+bool Sniper::attack(pair<int,int> des, int visibility, Unit*){
+	return true;
+}
+
 void Sniper::print(){
 
 	printf("Sniper Status: \nHealth: %d\nDamage: %d\nRange: %d\nCurrent Position: %d,%d\n", health, damage, range,pos.first,pos.second);
 }
+
 
 //*****UNIT -----> ARTILLERY*******
 Artillery::Artillery(int row, int col){
@@ -90,6 +111,7 @@ Artillery::Artillery(int row, int col){
 	this->damage = 250;
 	this->range = 2;
 	this->pos = make_pair(row,col);
+	this->moveCheck = false;
 }
 
 int Artillery::getHealth(){return health;}
@@ -99,6 +121,10 @@ int Artillery::getDamage(){return damage;}
 int Artillery::getRange(){return range;}
 
 pair<int,int> Artillery::getPosition(){return pos;}
+
+bool Artillery:: getMove(){return moveCheck;}
+
+void Artillery:: setMove(bool set){moveCheck = set;}
 
 bool Artillery::move(pair<int,int> des, int row, int col){
 	bool valid = false;
@@ -126,6 +152,10 @@ bool Artillery::move(pair<int,int> des, int row, int col){
 	return true;
 }
 
+bool Artillery::attack(pair<int,int> des, int visibility,Unit*){
+	return true;
+}
+
 void Artillery::print(){
 	printf("Artillery Status: \nHealth: %d\nDamage: %d\nRange: %d\nCurrent Position: %d,%d\n", health, damage, range,pos.first,pos.second);
 }
@@ -137,6 +167,7 @@ Infantry::Infantry(int row, int col){
 	this->damage = 1100;
 	this->range = 1;
 	this->pos = make_pair(row,col);
+	this->moveCheck = false;
 }
 
 int Infantry::getHealth(){return health;}
@@ -146,6 +177,10 @@ int Infantry::getDamage(){return damage;}
 int Infantry::getRange(){return range;}
 
 pair<int,int> Infantry::getPosition() {return pos;}
+
+bool Infantry:: getMove(){return moveCheck;}
+
+void Infantry:: setMove(bool set){moveCheck = set;}
 
 bool Infantry::move(pair<int,int>des, int row, int col){
 	bool valid = false;
@@ -175,6 +210,9 @@ bool Infantry::move(pair<int,int>des, int row, int col){
 		return true;
 }
 
+bool Infantry::attack(pair<int,int> des, int visibility,Unit*){
+	return true;
+}
 
 void Infantry::print(){
 	printf("Infantry Status: \nHealth: %d\nDamage: %d\nRange: %d\nCurrent Position: %d,%d\n", health, damage, range,pos.first,pos.second);
@@ -187,6 +225,7 @@ Cavalry::Cavalry(int row, int col,int columnsize){
 	this->damage = 200;
 	this->range = columnsize;
 	this->pos = make_pair(row,col);
+	this->moveCheck = false;
 }
 
 int Cavalry::getHealth(){return health;}
@@ -196,6 +235,11 @@ int Cavalry::getDamage(){return damage;}
 int Cavalry::getRange(){return range;}
 
 pair<int,int> Cavalry::getPosition() {return pos;}
+
+bool Cavalry:: getMove(){return moveCheck;}
+
+void Cavalry:: setMove(bool set){moveCheck = set;}
+
 
 bool Cavalry::move(pair<int,int>des, int row, int col){
 	bool valid = false;
@@ -222,7 +266,9 @@ bool Cavalry::move(pair<int,int>des, int row, int col){
 		return true;
 }
 
-
+bool Cavalry::attack(pair<int,int>des, int visibility,Unit*){
+	return true;
+}
 
 void Cavalry::print(){
 	printf("Cavalry Status: \nHealth: %d\nDamage: %d\nRange: %d\nCurrent Position: %d,%d\n", health, damage, range,pos.first, pos.second);
@@ -234,6 +280,7 @@ Biker::Biker(int row, int col){
 	this->damage = 425;
 	this->range = 1;
 	this->pos = make_pair(row,col);
+	this->moveCheck = false;
 }
 
 int Biker::getHealth(){return health;}
@@ -243,6 +290,11 @@ int Biker::getDamage(){return damage;}
 int Biker::getRange(){return range;}
 
 pair<int,int> Biker::getPosition(){return pos;}
+
+bool Biker:: getMove(){return moveCheck;}
+
+void Biker:: setMove(bool set){moveCheck = set;}
+
 
 bool Biker::move(pair<int,int>des, int row, int col){
 	bool valid = false;
@@ -276,6 +328,10 @@ bool Biker::move(pair<int,int>des, int row, int col){
 		pos.second = des.second;
 	}
 		return true;
+}
+
+bool Biker::attack(pair<int,int> des, int visibility, Unit*){
+	return true;
 }
 
 void Biker::print(){
