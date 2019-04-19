@@ -15,7 +15,7 @@ ARTILLERY
 -Attack: splash damage in a 2x2 area adjacent above to its current position
 -Health: 6000
 -Damage: 250 to each tile in the 2x2 area
--Range: 2 tiles from its current position
+-Range: 1 tiles from its current position
 
 INFANTRY
 -Movement: 1 tile any adjacent direction 

@@ -12,6 +12,8 @@ using namespace std;
 
 int Unit::getHealth(){return health;}
 
+void Unit::setHealth(int newHealth){health = newHealth;}
+
 int Unit::getRange(){return range;}
 
 int Unit::getDamage(){return damage;}
@@ -39,12 +41,12 @@ Base::Base(int row, int col){
 	this->isDead=false;
 }
 
-bool Base::move(pair<int,int> des, int row, int col){
+bool Base::move(vector<Unit*>units,pair<int,int> des, int row, int col){
 	printf("The base does not move at any point in the game\n");
 	return false;
 }
 
-bool Base::attack(pair<int,int> des, int visibility, Unit*){
+bool Base::attack(int visibility, Unit*){
 	printf("The base does not attack at any point in the game\n");
 	return false;
 }
@@ -60,8 +62,14 @@ Sniper::Sniper(int row, int col){
 	this->isDead=false;
 }
 
-bool Sniper::move(pair<int,int>des, int row, int col){
+bool Sniper::move(vector<Unit*> units,pair<int,int>des, int row, int col){
 	bool valid = false;
+	for(int i=0; i<units.size(); i++){
+		if(units[i]->getPosition() == des){
+			printf("Cannot move! A unit is already there\n");
+			return false;
+		}
+	}
 
 	if(des.first <0 || des.first >=row || des.second<0 || des.second >=col){
 		printf("Invalid Move! You went out of bounds!\n");
@@ -90,7 +98,29 @@ bool Sniper::move(pair<int,int>des, int row, int col){
 	return true;
 }
 
-bool Sniper::attack(pair<int,int> des, int visibility, Unit*){
+bool Sniper::attack(int visibility, Unit* unit2){
+	bool valid = false;
+	int newRange = this->range-visibility;
+
+	int rowdiff = abs(unit2->getPosition().first - pos.first);
+	int coldiff = abs(unit2->getPosition().second - pos.second);
+
+	//valid moves
+	if(rowdiff <=newRange && coldiff <=newRange) valid = true;
+	if(rowdiff <=newRange && coldiff ==0) valid =true;
+	if(rowdiff ==0 && coldiff <=newRange) valid =true;
+
+	if(valid == false){
+		printf("Sniper cannot attack that Unit. Sniper's current range is %d\n", range);
+		return false;
+	}
+	
+	else{
+		int newHealth = unit2->getHealth() - this->damage;
+		unit2->setHealth(newHealth);
+	}
+	if(unit2->getHealth() <=0) unit2->isDead= true;
+
 	return true;
 }
 
@@ -98,16 +128,23 @@ bool Sniper::attack(pair<int,int> des, int visibility, Unit*){
 //*****UNIT -----> ARTILLERY*******
 Artillery::Artillery(int row, int col){
 	this->health = 6000;
-	this->damage = 250;
-	this->range = 2;
+	this->damage = 475;
+	this->range = 4;
 	this->pos = make_pair(row,col);
 	this->moveCheck = false;
 	this->deadCount =0;
 	this->isDead = false;
 }
 
-bool Artillery::move(pair<int,int> des, int row, int col){
+bool Artillery::move(vector<Unit*> units,pair<int,int> des, int row, int col){
 	bool valid = false;
+
+	for(int i=0; i<units.size(); i++){
+		if(units[i]->getPosition() == des){
+			printf("Cannot move! A unit is already there\n");
+			return false;
+		}
+	}
 
 	if(des.first <0 || des.first >=row || des.second<0 || des.second >=col){
 		printf("Invalid Move! You went out of bounds!\n");
@@ -133,7 +170,32 @@ bool Artillery::move(pair<int,int> des, int row, int col){
 	return true;
 }
 
-bool Artillery::attack(pair<int,int> des, int visibility,Unit*){
+bool Artillery::attack(int visibility,Unit* unit2){
+	bool valid = false;
+	int newRange = this->range-visibility;
+	if(newRange !=4 && newRange != 3){
+		printf("Due to visibility, this unit cannot be used because range isnt 4 or 3\nCurrent range: %d\n",newRange);
+		return false;
+	}
+	int rowdiff = abs(unit2->getPosition().first - pos.first);
+	int coldiff = abs(unit2->getPosition().second - pos.second);
+
+	//valid moves
+	if((rowdiff <=newRange  && rowdiff>2) && (coldiff <=newRange && coldiff >2)) valid = true;
+	if((rowdiff <=newRange && rowdiff>2) && coldiff ==0) valid =true;
+	if(rowdiff ==0 && (coldiff <=newRange && coldiff >2)) valid =true;
+
+	if(valid == false){
+		printf("Artillery cannot attack that Unit. Artillery's current range is %d\n", range);
+		return false;
+	}
+	
+	else{
+		int newHealth = unit2->getHealth() - this->damage;
+		unit2->setHealth(newHealth);
+	}
+	if(unit2->getHealth() <=0) unit2->isDead= true;
+
 	return true;
 }
 	
@@ -149,9 +211,15 @@ Infantry::Infantry(int row, int col){
 	this->isDead =false;
 }
 
-bool Infantry::move(pair<int,int>des, int row, int col){
+bool Infantry::move(vector<Unit*>units,pair<int,int>des, int row, int col){
 	bool valid = false;
 
+	for(int i=0; i<units.size(); i++){
+		if(units[i]->getPosition() == des){
+			printf("Cannot move! A unit is already there\n");
+			return false;
+		}
+	}
 	if(des.first <0 || des.first >=row || des.second<0 || des.second >=col){
 		printf("Invalid Move! You went out of bounds!\n");
 		return false;
@@ -178,8 +246,32 @@ bool Infantry::move(pair<int,int>des, int row, int col){
 		return true;
 }
 
-bool Infantry::attack(pair<int,int> des, int visibility,Unit*){
+bool Infantry::attack(int visibility,Unit* unit2){
+	bool valid = false;
+	int newRange = this->range-visibility;
+	if(newRange != 1){
+		printf("Cant attack due to visibility\n");
+		return false;
+	}
+	int rowdiff = abs(unit2->getPosition().first - pos.first);
+	int coldiff = abs(unit2->getPosition().second - pos.second);
+
+	//valid moves
+	if(rowdiff ==newRange && coldiff ==newRange) valid = true;
+
+	if(valid == false){
+		printf("Infantry cannot attack that Unit. Infantry's current range is %d\n", range);
+		return false;
+	}
+	
+	else{
+		int newHealth = unit2->getHealth() - this->damage;
+		unit2->setHealth(newHealth);
+	}
+	if(unit2->getHealth() <=0) unit2->isDead= true;
+
 	return true;
+
 }
 
 
@@ -194,8 +286,15 @@ Cavalry::Cavalry(int row, int col,int columnsize){
 	this->isDead=false;
 }
 
-bool Cavalry::move(pair<int,int>des, int row, int col){
+bool Cavalry::move(vector<Unit*>units,pair<int,int>des, int row, int col){
 	bool valid = false;
+	
+	for(int i=0; i<units.size(); i++){
+		if(units[i]->getPosition() == des){
+			printf("Cannot move! A unit is already there\n");
+			return false;
+		}
+	}
 	if(des.first <0 || des.first >=row || des.second<0 || des.second >=col){
 		printf("Invalid Move! You went out of bounds!\n");
 		return false;
@@ -207,7 +306,7 @@ bool Cavalry::move(pair<int,int>des, int row, int col){
 	if(rowdiff ==0 && coldiff ==1) valid = true;
 
 	if(valid == false){
-		printf("Invalid destination. Cavalry only goes 1 tile left or right its current position\n");
+		printf("Invalid destination. Cavalry only goes 1 tile up or down its current position\n");
 		return false;
 	}
 	
@@ -220,7 +319,26 @@ bool Cavalry::move(pair<int,int>des, int row, int col){
 		return true;
 }
 
-bool Cavalry::attack(pair<int,int>des, int visibility,Unit*){
+bool Cavalry::attack(int visibility,Unit* unit2){
+	bool valid = false;
+	int newRange = this->range-visibility;
+	int rowdiff = abs(unit2->getPosition().first - pos.first);
+	int coldiff = abs(unit2->getPosition().second - pos.second);
+
+	//valid moves
+	if(rowdiff ==0 && coldiff <=newRange) valid = true;
+
+	if(valid == false){
+		printf("Cavalry cannot attack that Unit. Cavalry current range is %d\n", range);
+		return false;
+	}
+	
+	else{
+		int newHealth = unit2->getHealth() - this->damage;
+		unit2->setHealth(newHealth);
+	}
+	if(unit2->getHealth() <=0) unit2->isDead= true;
+
 	return true;
 }
 
@@ -235,9 +353,15 @@ Biker::Biker(int row, int col){
 	this->isDead =false;
 }
 
-bool Biker::move(pair<int,int>des, int row, int col){
+bool Biker::move(vector<Unit*>units,pair<int,int>des, int row, int col){
 	bool valid = false;
 
+	for(int i=0; i<units.size(); i++){
+		if(units[i]->getPosition() == des){
+			printf("Cannot move! A unit is already there\n");
+			return false;
+		}
+	}
 	if(des.first <0 || des.first >=row || des.second<0 || des.second >=col){
 		printf("Invalid Move! You went out of bounds!\n");
 		return false;
@@ -270,7 +394,34 @@ bool Biker::move(pair<int,int>des, int row, int col){
 		return true;
 }
 
-bool Biker::attack(pair<int,int> des, int visibility, Unit*){
+bool Biker::attack(int visibility, Unit* unit2){
+	bool valid = false;
+	int newRange = this->range-visibility;
+	if(newRange != 1){
+		printf("Cant attack due to visibility\n");
+		return false;
+	}
+	int rowdiff = abs(unit2->getPosition().first - pos.first);
+	int coldiff = abs(unit2->getPosition().second - pos.second);
+
+	//valid moves
+	if(rowdiff ==0 && coldiff ==newRange) valid = true;
+	if(rowdiff ==newRange &&coldiff ==0) valid = true;
+	if(valid == false){
+		printf("Biker cannot attack that Unit. Biker's current range is %d\n", range);
+		return false;
+	}
+	
+	else{
+		int newHealth = unit2->getHealth() - this->damage;
+		unit2->setHealth(newHealth);
+	}
+	if(unit2->getHealth() <=0) unit2->isDead= true;
+
+	return true;
+
+
+	
 	return true;
 }
 
