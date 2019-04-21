@@ -20,6 +20,9 @@ int main(){
 	}
 	m.resize(25, 25);
 	m.print(units);
+	cout << m.visibility(4, 5) << endl;
+	m.setWeather("foggy");
+	cout << m.visibility(4, 5) << endl;
 	//m.resize(15, 15);
 	//m.print();
 }

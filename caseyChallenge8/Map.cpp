@@ -41,6 +41,30 @@ void Map::generateMap(PerlinNoise *pn){
 		}
 	}
 }
+int Map::visibility(int r, int c) const{
+	int range = 5;
+	float tMod = 0;
+	float wMod = 0;
+	switch(map[r][c]){
+		case 'O': tMod = 0.5; break;
+		case 'D': tMod = 0.5; break;
+		case 'P': tMod = 0.75; break;
+		case 'F': tMod = 0.25; break;
+		case 'M': tMod = 1.5; break;
+	}
+	switch(w){
+		case 0: wMod = 1.0; break;
+		case 1: wMod = 0.9; break;
+		case 2: wMod = 0.9; break;
+		case 3: wMod = 0.7; break;
+		case 4: wMod = 0.5; break;
+		case 5: wMod = 0.4; break;
+		case 6: wMod = 0.6; break;
+	}
+	range *= (tMod * wMod);
+	if(range < 1) range = 1;
+	return range;
+}
 Map::Map(){
 	r = 0;
 	c = 0;
