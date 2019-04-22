@@ -41,7 +41,7 @@ Base::Base(int row, int col){
 	this->isDead=false;
 }
 
-bool Base::move(vector<Unit*>units,pair<int,int> des, int row, int col){
+bool Base::move(vector<vector<char> >grid,pair<int,int> des, int row, int col){
 	printf("The base does not move at any point in the game\n");
 	return false;
 }
@@ -62,15 +62,12 @@ Sniper::Sniper(int row, int col){
 	this->isDead=false;
 }
 
-bool Sniper::move(vector<Unit*> units,pair<int,int>des, int row, int col){
+bool Sniper::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
 	bool valid = false;
-	for(int i=0; i<units.size(); i++){
-		if(units[i]->getPosition() == des){
-			printf("Cannot move! A unit is already there\n");
-			return false;
-		}
+	if(grid[des.first][des.second] != '_'){
+		printf("Cannot move! A unit is already there\n");
+		return false;
 	}
-
 	if(des.first <0 || des.first >=row || des.second<0 || des.second >=col){
 		printf("Invalid Move! You went out of bounds!\n");
 		return false;
@@ -136,16 +133,13 @@ Artillery::Artillery(int row, int col){
 	this->isDead = false;
 }
 
-bool Artillery::move(vector<Unit*> units,pair<int,int> des, int row, int col){
+bool Artillery::move(vector<vector<char> >grid,pair<int,int> des, int row, int col){
 	bool valid = false;
-
-	for(int i=0; i<units.size(); i++){
-		if(units[i]->getPosition() == des){
-			printf("Cannot move! A unit is already there\n");
-			return false;
-		}
+	if(grid[des.first][des.second] != '_'){
+		printf("Cannot move! A unit is already there\n");
+		return false;
 	}
-
+	
 	if(des.first <0 || des.first >=row || des.second<0 || des.second >=col){
 		printf("Invalid Move! You went out of bounds!\n");
 		return false;
@@ -211,14 +205,11 @@ Infantry::Infantry(int row, int col){
 	this->isDead =false;
 }
 
-bool Infantry::move(vector<Unit*>units,pair<int,int>des, int row, int col){
+bool Infantry::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
 	bool valid = false;
-
-	for(int i=0; i<units.size(); i++){
-		if(units[i]->getPosition() == des){
-			printf("Cannot move! A unit is already there\n");
-			return false;
-		}
+	if(grid[des.first][des.second] != '_'){
+		printf("Cannot move! A unit is already there\n");
+		return false;
 	}
 	if(des.first <0 || des.first >=row || des.second<0 || des.second >=col){
 		printf("Invalid Move! You went out of bounds!\n");
@@ -286,15 +277,13 @@ Cavalry::Cavalry(int row, int col,int columnsize){
 	this->isDead=false;
 }
 
-bool Cavalry::move(vector<Unit*>units,pair<int,int>des, int row, int col){
+bool Cavalry::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
 	bool valid = false;
-	
-	for(int i=0; i<units.size(); i++){
-		if(units[i]->getPosition() == des){
-			printf("Cannot move! A unit is already there\n");
-			return false;
-		}
+	if(grid[des.first][des.second] != '_'){
+		printf("Cannot move! A unit is already there\n");
+		return false;
 	}
+
 	if(des.first <0 || des.first >=row || des.second<0 || des.second >=col){
 		printf("Invalid Move! You went out of bounds!\n");
 		return false;
@@ -353,15 +342,13 @@ Biker::Biker(int row, int col){
 	this->isDead =false;
 }
 
-bool Biker::move(vector<Unit*>units,pair<int,int>des, int row, int col){
+bool Biker::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
 	bool valid = false;
-
-	for(int i=0; i<units.size(); i++){
-		if(units[i]->getPosition() == des){
-			printf("Cannot move! A unit is already there\n");
-			return false;
-		}
+	if(grid[des.first][des.second] != '_'){
+		printf("Cannot move! A unit is already there\n");
+		return false;
 	}
+	
 	if(des.first <0 || des.first >=row || des.second<0 || des.second >=col){
 		printf("Invalid Move! You went out of bounds!\n");
 		return false;

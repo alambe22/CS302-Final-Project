@@ -79,11 +79,12 @@ int main(int argc, char* argv[]){
 	curPlayer = startGame(gameboard, players);
 
 	gameboard.print(unitGrid);
+	cout << "\e[0m";
 	//This is the main game loop. As long as the player does not
 	//choose "6" the game will keep running. Eventually this will be
 	//tied to victory conditions as well
 	while(true){
-		cout << players[curPlayer].name << "\'s turn\n";
+		cout << '\n' << players[curPlayer].name << "\'s turn\n";
 		
 		if(players[curPlayer].deadUnits.size() > 0){
 			for(it = players[curPlayer].deadUnits.begin(); it != players[curPlayer].deadUnits.end(); it++){
@@ -129,7 +130,8 @@ int main(int argc, char* argv[]){
 				}
 			}
 		}
-		cout << "Options: 1. Move Units\n 2. Attack\n 3. Check tile\n 4. Check Unit\n 5. End turn\n 6. Reprint Map\n 7. Quit\n Choice: ";
+		choice = -1;
+		cout << "Options:\n 1. Move Units\n 2. Check tile\n 3. Check unit\n 4. Attack\n 5. End turn\n 6. Reprint Map\n 7. Quit\n Choice: ";
 		cin >> choice;
 
 		//Menu
@@ -146,18 +148,15 @@ int main(int argc, char* argv[]){
 					}
 					cout << "Move unit: " << i << "? (y/n)";
 					cin >> charChoice;
-					while(true){
+					while(charChoice == 'y'){
 						cout << "Enter unit " << i << "\'s destination (row, col), or -1 -1 to cancel: ";
 						cin >> des.first >> des.second;
 						src = players[curPlayer].units[i]->getPosition();
-						if(unitGrid[des.first][des.second] != '_'){
-							cout << "Invalid move, unit already there\n";
-							continue;
-						}else if(players[curPlayer].units[i]->move(players[curPlayer].units, des, 15, 15)){
+						if(des.first == -1 && des.second == -1){
+							break;
+						}else if(players[curPlayer].units[i]->move(unitGrid, des, 15, 15)){
 							unitGrid[src.first][src.second] = '_';
 							unitGrid[des.first][des.second] = unitSymbols[i/2];
-							break;
-						}else if(des.first == -1 && des.second == -1){
 							break;
 						}
 					}
@@ -224,6 +223,7 @@ int main(int argc, char* argv[]){
 						}
 					}
 				}
+				break;
 			case 4:
 				//Attack
 				cout << "Which unit do you want to attack with? (0-9)";
@@ -279,10 +279,10 @@ int startGame(Map& gameboard, Player* players){
 	}
 	gameboard.resize(15, 15);
 
-	cout << "\n Input Player 1's Name: ";
+	cout << " Input Player 1's Name: ";
 	cin >> players[0].name;
 
-	cout << "\n Input Player 2's Name: ";
+	cout << " Input Player 2's Name: ";
 	cin >> players[1].name;
 
 	return rand()%2;
