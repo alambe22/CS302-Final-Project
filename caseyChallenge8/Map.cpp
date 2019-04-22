@@ -133,4 +133,5 @@ void Map::print(vector< vector<char> > &units){
 		}
 		cout << endl;
 	}
+	cout << "\e[0" << endl;
 }
