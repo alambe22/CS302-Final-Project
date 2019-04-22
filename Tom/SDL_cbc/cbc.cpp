@@ -179,16 +179,16 @@ void choosePicToDraw(Map &m, int row, int col, const string &terrain)
 //	string time = m.getTime();
 
 	//NOTE: TEST VALUES for time and weather
-//	string weather = "sunny";
-	string weather = "cloudy";
+	string weather = "sunny";
+//	string weather = "cloudy";
 //	string weather = "windy";
 //	string weather = "rainy";
 //	string weather = "snowy";
 //	string weather = "foggy";
 //	string weather = "hail";
 
-	string time = "day";
-//	string time = "night";
+//	string time = "day";
+	string time = "night";
 
 	//set picture path based on map parameters
 	if (weather == "cloudy" && time == "day") {path = "Images/cloudy/day/" + terrain; return;}
@@ -214,7 +214,7 @@ void choosePicToDraw(Map &m, int row, int col, const string &terrain)
 }
 
 //renders icons to game window that correspond to the current map configuration 
-void displayMap(Map &m)
+void displayWeatherTimeMap(Map &m)
 {
 	for (int row = 0; row < m.map.size(); ++row)
 	{
@@ -309,6 +309,9 @@ int main (int argc, char *args[])
 	m.resize(10,10);
 	m.print();
 	
+//TEST
+//string test;
+
 	//Start up SDL and create window
     if( !init() )
     {
@@ -335,12 +338,16 @@ int main (int argc, char *args[])
 					quit = true;
 				}
 			}
-				
+			
+//cout << "Blah me:\n";
+//cin >> test;
+//cout << "You entered: " << test << endl;
+
 			//Clear screen
 			SDL_RenderClear( gRenderer );
 
 			//displays a grid of icons representing the current map configuration
-			displayMap( m );
+			displayWeatherTimeMap( m );
 
 			//Update screen
 			SDL_RenderPresent( gRenderer );
