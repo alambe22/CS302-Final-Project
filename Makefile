@@ -1,9 +1,9 @@
 CXX=	  g++
 CXXFLAGS= -g -Wall -std=gnu++11
-LDFLAGS=
+LDFLAGS= -lSDL2
 SHELL=	  bash
 PROGRAMS= main
-SOURCES= main.cpp Units/Units.cpp caseyChallenge8/Map.cpp caseyChallenge8/PerlinNoise.cpp
+SOURCES= main.cpp Units/Units.cpp caseyChallenge8/Map.cpp caseyChallenge8/PerlinNoise.cpp Tom/SDL_cbc/cbc.cpp
 OBJECTS= $(SOURCES:.cpp=.o)
 
 all:	 $(PROGRAMS)
