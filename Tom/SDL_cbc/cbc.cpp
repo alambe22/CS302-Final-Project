@@ -150,8 +150,19 @@ void close()
     SDL_Quit();
 }
 
+void loopReset()
+{
+	//Free loaded image
+    SDL_DestroyTexture( gTexture );
+    gTexture = NULL;
+
+    //Destroy window    
+//    SDL_DestroyRenderer( gRenderer );
+//    gRenderer = NULL;
+}
+
 //builds and renders one element from map to corresponding viewport in window
-void buildViewport(int row, int col, Map &m)
+void buildTerrainViewport(int row, int col, Map &m)
 {
 //NOTE: Made a HUGE mistake with integer division...see commented out code below == () portion is ALWAYS ZERO 
 //	viewport.x = ( col / m.map[row].size() ) * SCREEN_WIDTH;
@@ -169,7 +180,9 @@ void buildViewport(int row, int col, Map &m)
 
 //chooses picture based on map parameters
 //NOTE: passing map object because I weather, time, etc to choose the picture
-void choosePicToDraw(Map &m, int row, int col, const string &terrain)
+//void choosePicToDraw(Map &m, int row, int col, const string &terrain)
+//PARAMETERS: w = weather, t = time, terrain
+void chooseTerrainToDraw(string w, string t, const string &terrain)
 {
 	//NOTE: organize these cases/IFs the same as folders in Images (weather->day/night)
 	
@@ -178,17 +191,8 @@ void choosePicToDraw(Map &m, int row, int col, const string &terrain)
 //	string weather = m.getWeather();
 //	string time = m.getTime();
 
-	//NOTE: TEST VALUES for time and weather
-	string weather = "sunny";
-//	string weather = "cloudy";
-//	string weather = "windy";
-//	string weather = "rainy";
-//	string weather = "snowy";
-//	string weather = "foggy";
-//	string weather = "hail";
-
-//	string time = "day";
-	string time = "night";
+	string weather = w;
+	string time = t;
 
 	//set picture path based on map parameters
 	if (weather == "cloudy" && time == "day") {path = "Images/cloudy/day/" + terrain; return;}
@@ -211,10 +215,12 @@ void choosePicToDraw(Map &m, int row, int col, const string &terrain)
 	
 	else if (weather == "windy" && time == "day") {path = "Images/windy/day/" + terrain; return;}
 	else if (weather == "windy" && time == "night") {path = "Images/windy/night/" + terrain; return;}
+
+//	else {printf("Incorrect inputs: %s, %s", weather.c_str(), time.c_str());}
 }
 
 //renders icons to game window that correspond to the current map configuration 
-void displayWeatherTimeMap(Map &m)
+void displayWeatherTimeTerrain(Map &m, string w, string t)
 {
 	for (int row = 0; row < m.map.size(); ++row)
 	{
@@ -224,7 +230,8 @@ void displayWeatherTimeMap(Map &m)
 			{
 				case 'O':
 					
-					choosePicToDraw(m, row, col, "river.bmp");
+//					chooseTerrainToDraw(m, row, col, "river.bmp");
+					chooseTerrainToDraw(w, t, "river.bmp");
 				
 					//Load media
 					if( !loadMedia() ) 
@@ -232,13 +239,14 @@ void displayWeatherTimeMap(Map &m)
 						printf( "Failed to load media for row %d and col %d!\n", row, col );
 					}
 
-					else { buildViewport(row, col, m); }
+					else { buildTerrainViewport(row, col, m); }
 					
 					break;
 
 				case 'D':
 					
-					choosePicToDraw(m, row, col, "desert.bmp");
+//					chooseTerrainToDraw(m, row, col, "desert.bmp");
+					chooseTerrainToDraw(w, t, "desert.bmp");
 					
 					//Load media
 					if( !loadMedia() ) 
@@ -246,13 +254,14 @@ void displayWeatherTimeMap(Map &m)
 						printf( "Failed to load media for row %d and col %d!\n", row, col );
 					}
 
-					else { buildViewport(row, col, m); }
+					else { buildTerrainViewport(row, col, m); }
 					
 					break;
 				
 				case 'P':
 
-					choosePicToDraw(m, row, col, "plains.bmp");
+//					chooseTerrainToDraw(m, row, col, "plains.bmp");
+					chooseTerrainToDraw(w, t, "plains.bmp");
 					
 					//Load media
 					if( !loadMedia() ) 
@@ -260,13 +269,14 @@ void displayWeatherTimeMap(Map &m)
 						printf( "Failed to load media for row %d and col %d!\n", row, col );
 					}
 
-					else { buildViewport(row, col, m); }
+					else { buildTerrainViewport(row, col, m); }
 					
 					break;
 
 				case 'F':
 					
-					choosePicToDraw(m, row, col, "forest.bmp");
+//					chooseTerrainToDraw(m, row, col, "forest.bmp");
+					chooseTerrainToDraw(w, t, "forest.bmp");
 					
 					//Load media
 					if( !loadMedia() ) 
@@ -274,13 +284,14 @@ void displayWeatherTimeMap(Map &m)
 						printf( "Failed to load media for row %d and col %d!\n", row, col );
 					}
 
-					else { buildViewport(row, col, m); }
+					else { buildTerrainViewport(row, col, m); }
 					
 					break;
 
 				case 'M':
 					
-					choosePicToDraw(m, row, col, "mountain.bmp");
+//					chooseTerrainToDraw(m, row, col, "mountain.bmp");
+					chooseTerrainToDraw(w, t, "mountain.bmp");
 					
 					//Load media
 					if( !loadMedia() ) 
@@ -288,7 +299,7 @@ void displayWeatherTimeMap(Map &m)
 						printf( "Failed to load media for row %d and col %d!\n", row, col );
 					}
 
-					else { buildViewport(row, col, m); }
+					else { buildTerrainViewport(row, col, m); }
 					
 					break;
 
@@ -300,17 +311,171 @@ void displayWeatherTimeMap(Map &m)
 	}
 }
 
+//draws unit image to correct location within tile viewport
+void buildUnitViewport(int row, int col, vector<vector<char> > &v)
+{
+	//assign dimensions to viewport
+	viewport.x = (( col * SCREEN_WIDTH ) / v[row].size()) + ( SCREEN_WIDTH / v[row].size() ) / 4;
+	viewport.y = ( row * SCREEN_HEIGHT ) / v.size() + 2 * ( SCREEN_HEIGHT / v.size() ) / 4; //NOTE; think about changing 2 to 3
+	viewport.w = ( SCREEN_WIDTH / v[row].size() ) / 2;
+	viewport.h = ( SCREEN_HEIGHT / v.size() ) / 2;
+	SDL_RenderSetViewport( gRenderer, &viewport );
+
+	//Render texture to screen
+	SDL_RenderCopy( gRenderer, gTexture, NULL, NULL );
+}
+
+//draws units if present in corresponding tile
+void displayUnits(vector <vector<char> > &v)
+{
+	for (int row = 0; row < v.size(); ++row)
+	{
+		for (int col = 0; col < v[row].size(); ++col)
+		{
+			switch(v[row][col])
+			{
+				case '_':
+					
+					/*Do nothing. No unit present on tile.*/
+					break;	
+
+				//sniper unit
+				case 'S':
+
+					path = "Images/Units/sniper.bmp";
+				
+					//Load media
+					if( !loadMedia() ) 
+					{
+						printf( "Failed to load media for row %d and col %d!\n", row, col );
+					}
+
+					else { buildUnitViewport(row, col, v); }
+					
+					break;
+
+				//artillery
+				case 'A':
+					
+					path = "Images/Units/artillery.bmp";
+					
+					//Load media
+					if( !loadMedia() ) 
+					{
+						printf( "Failed to load media for row %d and col %d!\n", row, col );
+					}
+
+					else { buildUnitViewport(row, col, v); }
+					
+					break;
+				
+				//infantry unit
+				case 'I':
+
+					path = "Images/Units/infantry.bmp";
+					
+					//Load media
+					if( !loadMedia() ) 
+					{
+						printf( "Failed to load media for row %d and col %d!\n", row, col );
+					}
+
+					else { buildUnitViewport(row, col, v); }
+					
+					break;
+
+				//cavalry unit
+				case 'C':
+					
+					path = "Images/Units/cavalry.bmp";
+					
+					//Load media
+					if( !loadMedia() ) 
+					{
+						printf( "Failed to load media for row %d and col %d!\n", row, col );
+					}
+
+					else { buildUnitViewport(row, col, v); }
+					
+					break;
+
+				//biker unit	
+				case 'B':
+					
+					path = "Images/Units/biker.bmp";
+					
+					//Load media
+					if( !loadMedia() ) 
+					{
+						printf( "Failed to load media for row %d and col %d!\n", row, col );
+					}
+
+					else { buildUnitViewport(row, col, v); }
+					
+					break;
+
+				//base unit	
+				case 'b':
+					
+					path = "Images/Units/base.bmp";
+					
+					//Load media
+					if( !loadMedia() ) 
+					{
+						printf( "Failed to load media for row %d and col %d!\n", row, col );
+					}
+
+					else { buildUnitViewport(row, col, v); }
+					
+					break;
+				default:
+					cout << "Invalid m.map entry\n" << endl;
+					exit(1);
+			}
+		}
+	}
+
+}
 
 int main (int argc, char *args[])
 {
+//TEST INPUTS--------------------------------------------------------------------------------------------------------------
 	//create game board
 //	srand(time(NULL));//put this back later when I want random maps
 	Map m;
 	m.resize(10,10);
 	m.print();
 	
-//TEST
-//string test;
+	string w = "sunny";
+	string t = "day";
+
+	vector <vector<char> > v;
+	v.resize(10);
+
+	char us[7] = {'S', 'A', 'I', 'C', 'B', 'b', '_'};
+
+	for (int i = 0; i < v.size(); ++i)
+	{
+		v[i].resize(10);
+
+		for (int j = 0; j < v[i].size(); ++j)
+		{
+			v[i][j] = us[rand() % 7];
+		}
+	}
+
+
+	printf("\nUNITS:\n"); 
+	for (int i = 0; i < v.size(); ++i)
+	{
+		for (int j = 0; j < v[i].size(); ++j)
+		{
+			if ( j + 1 == v[i].size() ) {printf("%c\n", v[i][j]);}
+			else {printf("%c ", v[i][j]);}
+		}
+	}
+
+//TEST INPUTS--------------------------------------------------------------------------------------------------------------
 
 	//Start up SDL and create window
     if( !init() )
@@ -339,18 +504,23 @@ int main (int argc, char *args[])
 				}
 			}
 			
-//cout << "Blah me:\n";
-//cin >> test;
-//cout << "You entered: " << test << endl;
-
 			//Clear screen
 			SDL_RenderClear( gRenderer );
 
 			//displays a grid of icons representing the current map configuration
-			displayWeatherTimeMap( m );
+			displayWeatherTimeTerrain( m, w, t );
+
+			displayUnits(v);
 
 			//Update screen
 			SDL_RenderPresent( gRenderer );
+			
+//TEST FOR VALGRIND			
+			loopReset();
+
+//cout << "Enter: weather time\n";
+//cin >> w >> t;
+//cout << "You entered: " << w << " " << t << endl;
 		}
     }
 

@@ -53,7 +53,6 @@ bool init()
 			printf( "Warning: Linear texture filtering not enabled!" );
 		}
 
-		
 		//Create window
         gWindow = SDL_CreateWindow( "Chess, but COOLER!!!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
 									SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
@@ -149,7 +148,7 @@ void close()
 }
 
 //builds and renders one element from map to corresponding viewport in window
-void buildViewport(int row, int col, Map &m)
+void buildMapTileViewport(int row, int col, Map &m)
 {
 //NOTE: Made a HUGE mistake with integer division...see commented out code below == () portion is ALWAYS ZERO 
 //	viewport.x = ( col / m.map[row].size() ) * SCREEN_WIDTH;
@@ -167,25 +166,10 @@ void buildViewport(int row, int col, Map &m)
 
 //chooses picture based on map parameters
 //NOTE: passing map object because I weather, time, etc to choose the picture
-void choosePicToDraw(Map &m, int row, int col, const string &terrain)
+void chooseMapTileToDraw(Map &m, const string &terrain)
 {
-	//NOTE: organize these cases/IFs the same as folders in Images (weather->day/night)
-	
 	//get weather and time from map
-	//NOTE: can actually just do "if (m.getWeather == "blah") {}"
-//	string weather = m.getWeather();
-//	string time = m.getTime();
-
-	//NOTE: TEST VALUES for time and weather
 	string weather = m.getWeather();
-//	string weather = "cloudy";
-//	string weather = "windy";
-//	string weather = "rainy";
-//	string weather = "snowy";
-//	string weather = "foggy";
-//	string weather = "hail";
-
-//	string time = "day";
 	string time = m.getTime();
 
 	//set picture path based on map parameters
@@ -212,7 +196,7 @@ void choosePicToDraw(Map &m, int row, int col, const string &terrain)
 }
 
 //renders icons to game window that correspond to the current map configuration 
-void displayWeatherTimeMap(Map &m)
+void displayWeatherTimeTerrain(Map &m)
 {
 	for (int row = 0; row < m.map.size(); ++row)
 	{
@@ -222,7 +206,7 @@ void displayWeatherTimeMap(Map &m)
 			{
 				case 'O':
 					
-					choosePicToDraw(m, row, col, "river.bmp");
+					chooseMapTileToDraw(m, "river.bmp");
 				
 					//Load media
 					if( !loadMedia() ) 
@@ -230,13 +214,13 @@ void displayWeatherTimeMap(Map &m)
 						printf( "Failed to load media for row %d and col %d!\n", row, col );
 					}
 
-					else { buildViewport(row, col, m); }
+					else { buildMapTileViewport(row, col, m); }
 					
 					break;
 
 				case 'D':
 					
-					choosePicToDraw(m, row, col, "desert.bmp");
+					chooseMapTileToDraw(m, "desert.bmp");
 					
 					//Load media
 					if( !loadMedia() ) 
@@ -244,13 +228,13 @@ void displayWeatherTimeMap(Map &m)
 						printf( "Failed to load media for row %d and col %d!\n", row, col );
 					}
 
-					else { buildViewport(row, col, m); }
+					else { buildMapTileViewport(row, col, m); }
 					
 					break;
 				
 				case 'P':
 
-					choosePicToDraw(m, row, col, "plains.bmp");
+					chooseMapTileToDraw(m, "plains.bmp");
 					
 					//Load media
 					if( !loadMedia() ) 
@@ -258,13 +242,13 @@ void displayWeatherTimeMap(Map &m)
 						printf( "Failed to load media for row %d and col %d!\n", row, col );
 					}
 
-					else { buildViewport(row, col, m); }
+					else { buildMapTileViewport(row, col, m); }
 					
 					break;
 
 				case 'F':
 					
-					choosePicToDraw(m, row, col, "forest.bmp");
+					chooseMapTileToDraw(m, "forest.bmp");
 					
 					//Load media
 					if( !loadMedia() ) 
@@ -272,13 +256,13 @@ void displayWeatherTimeMap(Map &m)
 						printf( "Failed to load media for row %d and col %d!\n", row, col );
 					}
 
-					else { buildViewport(row, col, m); }
+					else { buildMapTileViewport(row, col, m); }
 					
 					break;
 
 				case 'M':
 					
-					choosePicToDraw(m, row, col, "mountain.bmp");
+					chooseMapTileToDraw(m, "mountain.bmp");
 					
 					//Load media
 					if( !loadMedia() ) 
@@ -286,7 +270,7 @@ void displayWeatherTimeMap(Map &m)
 						printf( "Failed to load media for row %d and col %d!\n", row, col );
 					}
 
-					else { buildViewport(row, col, m); }
+					else { buildMapTileViewport(row, col, m); }
 					
 					break;
 
@@ -296,6 +280,132 @@ void displayWeatherTimeMap(Map &m)
 			}
 		}
 	}
+}
+
+//draws unit image to correct location within tile viewport
+void buildUnitViewport(int row, int col, vector<vector<char> > &v)
+{
+    //assign dimensions to viewport
+    viewport.x = (( col * SCREEN_WIDTH ) / v[row].size()) + ( SCREEN_WIDTH / v[row].size() ) / 4;
+    viewport.y = ( row * SCREEN_HEIGHT ) / v.size() + 2 * ( SCREEN_HEIGHT / v.size() ) / 4; 
+    viewport.w = ( SCREEN_WIDTH / v[row].size() ) / 2;
+    viewport.h = ( SCREEN_HEIGHT / v.size() ) / 2;
+    SDL_RenderSetViewport( gRenderer, &viewport );
+
+    //Render texture to screen
+    SDL_RenderCopy( gRenderer, gTexture, NULL, NULL );
+}
+
+//draws units if present in corresponding tile
+void displayUnits(vector <vector<char> > &v)
+{
+    for (int row = 0; row < v.size(); ++row)
+    {
+        for (int col = 0; col < v[row].size(); ++col)
+        {
+            switch(v[row][col])
+            {
+                case '_':
+
+                    /*Do nothing. No unit present on tile.*/
+                    break;
+
+                //sniper unit
+                case 'S':
+
+                    path = "Images/Units/sniper.bmp";
+
+                    //Load media
+                    if( !loadMedia() )
+                    {
+                        printf( "Failed to load media for row %d and col %d!\n", row, col );
+                    }
+
+                    else { buildUnitViewport(row, col, v); }
+
+                    break;
+
+               //artillery
+                case 'A':
+
+                    path = "Images/Units/artillery.bmp";
+
+                    //Load media
+                    if( !loadMedia() )
+                    {
+                        printf( "Failed to load media for row %d and col %d!\n", row, col );
+                    }
+
+                    else { buildUnitViewport(row, col, v); }
+
+                    break;
+
+                //infantry unit
+                case 'I':
+
+                    path = "Images/Units/infantry.bmp";
+
+                    //Load media
+                    if( !loadMedia() )
+                    {
+                        printf( "Failed to load media for row %d and col %d!\n", row, col );
+                    }
+
+                    else { buildUnitViewport(row, col, v); }
+
+                    break;
+
+                //cavalry unit
+                case 'C':
+
+                    path = "Images/Units/cavalry.bmp";
+
+                    //Load media
+                    if( !loadMedia() )
+                    {
+                        printf( "Failed to load media for row %d and col %d!\n", row, col );
+                    }
+
+                    else { buildUnitViewport(row, col, v); }
+
+                    break;
+
+                //biker unit
+                case 'B':
+
+                    path = "Images/Units/biker.bmp";
+
+                    //Load media
+                    if( !loadMedia() )
+                    {
+                        printf( "Failed to load media for row %d and col %d!\n", row, col );
+                    }
+
+                    else { buildUnitViewport(row, col, v); }
+
+                    break;
+
+                //base unit
+                case 'b':
+
+                    path = "Images/Units/base.bmp";
+
+                    //Load media
+                    if( !loadMedia() )
+                    {
+                        printf( "Failed to load media for row %d and col %d!\n", row, col );
+                    }
+
+                    else { buildUnitViewport(row, col, v); }
+
+                    break;
+                
+				default:
+                    cout << "Invalid m.map entry\n" << endl;
+                    exit(1);
+            }
+        }
+    }
 }
 
 
@@ -345,7 +455,7 @@ void displayWeatherTimeMap(Map &m)
 			SDL_RenderClear( gRenderer );
 
 			//displays a grid of icons representing the current map configuration
-			displayWeatherTimeMap( m );
+			displayWeatherTimeTerrain( m );
 
 			//Update screen
 			SDL_RenderPresent( gRenderer );
@@ -358,8 +468,10 @@ void displayWeatherTimeMap(Map &m)
     return 0;
 }*/
 
-void display(Map& m){
-	SDL_RenderClear(gRenderer);
-	displayWeatherTimeMap(m);
-	SDL_RenderPresent(gRenderer);
+void display( Map &m, vector<vector<char> > &v )
+{
+	SDL_RenderClear( gRenderer );
+	displayWeatherTimeTerrain( m );
+	displayUnits( v );
+	SDL_RenderPresent( gRenderer );
 }

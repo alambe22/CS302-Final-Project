@@ -13,10 +13,16 @@ bool loadMedia();
 
 void close();
 
-void buildViewport(int row, int col, Map&m);
+void buildMapTileViewport ( int row, int col, Map&m );
 
-void choosePicToDraw(Map &m, int row, int col, const string &terrain);
+void chooseMapTileToDraw ( Map &m, const string &terrain );
 
-void displayWeatherTimeMap(Map &m);
+void displayWeatherTimeTerrain ( Map &m );
 
-void display(Map& m);
+void buildUnitViewport ( int row, int col, vector<vector<char> > &v );
+
+void displayUnits ( vector<vector<char> > &v );
+
+void display ( Map& m, vector<vector<char> > &v );
+
+
