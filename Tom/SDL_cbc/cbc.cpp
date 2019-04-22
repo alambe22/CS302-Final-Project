@@ -180,13 +180,15 @@ void choosePicToDraw(Map &m, int row, int col, const string &terrain)
 
 	//NOTE: TEST VALUES for time and weather
 //	string weather = "sunny";
-//	string weather = "cloudy";
+	string weather = "cloudy";
 //	string weather = "windy";
 //	string weather = "rainy";
 //	string weather = "snowy";
-	string weather = "foggy";
+//	string weather = "foggy";
 //	string weather = "hail";
+
 	string time = "day";
+//	string time = "night";
 
 	//set picture path based on map parameters
 	if (weather == "cloudy" && time == "day") {path = "Images/cloudy/day/" + terrain; return;}
