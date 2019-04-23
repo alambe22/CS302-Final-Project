@@ -114,7 +114,8 @@ int main(int argc, char* argv[]){
 				}
 			}
 
-			display(gameboard);
+//			display(gameboard);
+			display(gameboard, unitGrid); //TOM: added this
 
 			cout << '\n' << players[curPlayer].name << "\'s turn\n";
 			
@@ -194,7 +195,8 @@ int main(int argc, char* argv[]){
 						}
 					}
 					//gameboard.print(unitGrid);
-					display(gameboard);
+		//			display(gameboard);
+					display(gameboard, unitGrid); //TOM: added this
 					break;
 				case 2:
 					cout << "Which tile (enter rows and columns): ";
@@ -283,7 +285,8 @@ int main(int argc, char* argv[]){
 						gameboard.changeTime();
 					}
 					//gameboard.print(unitGrid);
-					display(gameboard);
+		//			display(gameboard);
+					display(gameboard, unitGrid); //TOM: added this
 					for(i=0; i<10; i++){
 						//players[curPlayer].units[i]->
 					}
@@ -292,7 +295,8 @@ int main(int argc, char* argv[]){
 					//Reprints map
 				case 6:
 					//gameboard.print(unitGrid);
-					display(gameboard);
+		//			display(gameboard);
+					display(gameboard, unitGrid); //TOM: added this
 					break;
 					//Exits game
 				case 7:
