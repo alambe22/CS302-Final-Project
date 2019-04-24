@@ -1,3 +1,6 @@
+/*	Credit to Paul Silisteanu for his perlin noise implementation
+ *	This is used in the Map.cpp file for generating terrain
+ */
 #include "PerlinNoise.h"
 #include <cmath>
 #include <random>
