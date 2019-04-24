@@ -23,10 +23,10 @@ void chooseMapTileToDraw ( Map &m, const string &terrain );
 
 void displayWeatherTimeTerrain ( Map &m );
 
-void buildUnitViewport ( int row, int col, vector<vector<char> > &v );
+void buildUnitViewport ( int row, int col, vector < vector < pair<char, bool> > > &v );
 
-void displayUnits ( vector<vector<char> > &v );
+void displayUnits ( vector < vector < pair<char, bool> > > &v );
 
-void display ( Map& m, vector<vector<char> > &v );
+void display ( Map& m, vector < vector < pair<char, bool> > > &v );
 
 
