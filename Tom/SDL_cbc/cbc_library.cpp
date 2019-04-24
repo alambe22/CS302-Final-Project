@@ -289,7 +289,7 @@ void displayWeatherTimeTerrain(Map &m)
 }
 
 //draws unit image to correct location within tile viewport
-void buildUnitViewport(int row, int col, vector<vector<char> > &v)
+void buildUnitViewport(int row, int col, vector <vector < pair<char, bool> > > &v)
 {
     //assign dimensions to viewport
     viewport.x = (( col * SCREEN_WIDTH ) / v[row].size()) + ( SCREEN_WIDTH / v[row].size() ) / 4;
@@ -303,14 +303,14 @@ void buildUnitViewport(int row, int col, vector<vector<char> > &v)
 }
 
 //draws units if present in corresponding tile
-void displayUnits(vector <vector<char> > &v)
+void displayUnits( vector < vector < pair<char, bool> > > &v)
 {
     //Runs through 2d vector of chars holding unit positions and draws them in correct terrain tiles
 	for (int row = 0; row < v.size(); ++row)
     {
         for (int col = 0; col < v[row].size(); ++col)
         {
-            switch(v[row][col])
+            switch(v[row][col].first)
             {
                 case '_':
 
@@ -320,7 +320,10 @@ void displayUnits(vector <vector<char> > &v)
                 //sniper unit
                 case 'S':
 
-                    path = "Images/Units/sniper.bmp";
+					//player 1 unit
+					if (v[row][col].second == true) { path = "Images/Units/player1/sniper.bmp"; } 
+					//player 2 unit
+					else { path = "Images/Units/player2/sniper.bmp"; }
 
                     //Load media
                     if( !loadMedia() )
@@ -335,7 +338,10 @@ void displayUnits(vector <vector<char> > &v)
                //artillery
                 case 'A':
 
-                    path = "Images/Units/artillery.bmp";
+					//player 1 unit
+					if (v[row][col].second == true) { path = "Images/Units/player1/artillery.bmp"; } 
+					//player 2 unit
+					else { path = "Images/Units/player2/artillery.bmp"; }
 
                     //Load media
                     if( !loadMedia() )
@@ -350,7 +356,10 @@ void displayUnits(vector <vector<char> > &v)
                 //infantry unit
                 case 'I':
 
-                    path = "Images/Units/infantry.bmp";
+					//player 1 unit
+					if (v[row][col].second == true) { path = "Images/Units/player1/infantry.bmp"; } 
+					//player 2 unit
+					else { path = "Images/Units/player2/infantry.bmp"; }
 
                     //Load media
                     if( !loadMedia() )
@@ -365,7 +374,10 @@ void displayUnits(vector <vector<char> > &v)
                 //cavalry unit
                 case 'C':
 
-                    path = "Images/Units/cavalry.bmp";
+					//player 1 unit
+					if (v[row][col].second == true) { path = "Images/Units/player1/cavalry.bmp"; } 
+					//player 2 unit
+					else { path = "Images/Units/player2/cavalry.bmp"; }
 
                     //Load media
                     if( !loadMedia() )
@@ -380,7 +392,10 @@ void displayUnits(vector <vector<char> > &v)
                 //biker unit
                 case 'B':
 
-                    path = "Images/Units/biker.bmp";
+					//player 1 unit
+					if (v[row][col].second == true) { path = "Images/Units/player1/biker.bmp"; } 
+					//player 2 unit
+					else { path = "Images/Units/player2/biker.bmp"; }
 
                     //Load media
                     if( !loadMedia() )
@@ -395,7 +410,10 @@ void displayUnits(vector <vector<char> > &v)
                 //base unit
                 case 'b':
 
-                    path = "Images/Units/base.bmp";
+					//player 1 unit
+					if (v[row][col].second == true) { path = "Images/Units/player1/base.bmp"; } 
+					//player 2 unit
+					else { path = "Images/Units/player2/base.bmp"; }
 
                     //Load media
                     if( !loadMedia() )
@@ -416,7 +434,7 @@ void displayUnits(vector <vector<char> > &v)
 }
 
 //helper function to allow one function call instead of 4 each time the gameboard has changed and needs to be redrawn
-void display( Map &m, vector<vector<char> > &v )
+void display( Map &m, vector < vector < pair<char, bool> > > &v )
 {
 	SDL_RenderClear( gRenderer );
 	displayWeatherTimeTerrain( m );
