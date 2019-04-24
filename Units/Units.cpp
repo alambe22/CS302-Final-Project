@@ -59,7 +59,7 @@ bool Base::attack(int visibility, Unit*){
 Sniper::Sniper(int row, int col){
 	this->health = 2500;
 	this->damage = 550;
-	this->range = 5;
+	this->range = 6;
 	this->pos = make_pair(row,col);
 	this->moveCheck = false;
 	this->deadCount =0;
@@ -100,14 +100,11 @@ bool Sniper::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
 	moveCheck = true;
 	return true;
 }
-//any direction including diagonal with a range up to 5
+//any direction including diagonal with a base range up to 6 
 bool Sniper::attack(int visibility, Unit* unit2){
 	bool valid = false;
-	int newRange = this->range-visibility;
-	if(newRange < 1){
-		printf("Cant attack due to visibility\n");
-		return false;
-	}
+	int newRange = visibility;
+
 	int rowdiff = abs(unit2->getPosition().first - pos.first);
 	int coldiff = abs(unit2->getPosition().second - pos.second);
 
@@ -117,7 +114,7 @@ bool Sniper::attack(int visibility, Unit* unit2){
 	if(rowdiff ==0 && coldiff <=newRange) valid =true;
 
 	if(valid == false){
-		printf("Sniper cannot attack that Unit. Sniper's current range is %d\n", range);
+		printf("Sniper cannot attack that Unit\n");
 		return false;
 	}
 	
@@ -135,7 +132,7 @@ bool Sniper::attack(int visibility, Unit* unit2){
 Artillery::Artillery(int row, int col){
 	this->health = 6000;
 	this->damage = 475;
-	this->range = 4;
+	this->range = 5;
 	this->pos = make_pair(row,col);
 	this->moveCheck = false;
 	this->deadCount =0;
@@ -176,24 +173,24 @@ bool Artillery::move(vector<vector<char> >grid,pair<int,int> des, int row, int c
 	return true;
 }
 
-//attacks in any direction including diagonal at a range of 3 or 4 ONLY
+//attacks in any direction including diagonal at a range of 2 or  3 or 4 ONLY
 bool Artillery::attack(int visibility,Unit* unit2){
 	bool valid = false;
-	int newRange = this->range-visibility;
-	if(newRange !=4 && newRange != 3){
-		printf("Due to visibility, this unit cannot be used because range isnt 4 or 3\nCurrent range: %d\n",newRange);
-		return false;
+	int newRange = visibility;
+	if(newRange <2){
+		newRange =2;
 	}
+
 	int rowdiff = abs(unit2->getPosition().first - pos.first);
 	int coldiff = abs(unit2->getPosition().second - pos.second);
 
 	//valid moves
-	if((rowdiff <=newRange  && rowdiff>2) && (coldiff <=newRange && coldiff >2)) valid = true;
-	if((rowdiff <=newRange && rowdiff>2) && coldiff ==0) valid =true;
-	if(rowdiff ==0 && (coldiff <=newRange && coldiff >2)) valid =true;
+	if((rowdiff <=newRange  && rowdiff>1) && (coldiff <=newRange && coldiff >1)) valid = true;
+	if((rowdiff <=newRange && rowdiff>1) && coldiff ==0) valid =true;
+	if(rowdiff ==0 && (coldiff <=newRange && coldiff >1)) valid =true;
 
 	if(valid == false){
-		printf("Artillery cannot attack that Unit. Artillery's current range is %d\n", range);
+		printf("Artillery cannot attack that Unit\n");
 		return false;
 	}
 	
@@ -211,7 +208,7 @@ bool Artillery::attack(int visibility,Unit* unit2){
 Infantry::Infantry(int row, int col){
 	this->health = 3000;
 	this->damage = 1100;
-	this->range = 1;
+	this->range = 3;
 	this->pos = make_pair(row,col);
 	this->moveCheck = false;
 	this->deadCount =0;
@@ -255,11 +252,8 @@ bool Infantry::move(vector<vector<char> >grid,pair<int,int>des, int row, int col
 //diagonal attacks ONLY 1 tile
 bool Infantry::attack(int visibility,Unit* unit2){
 	bool valid = false;
-	int newRange = this->range-visibility;
-	if(newRange != 1){
-		printf("Cant attack due to visibility\n");
-		return false;
-	}
+	int newRange = visibility;
+
 	int rowdiff = abs(unit2->getPosition().first - pos.first);
 	int coldiff = abs(unit2->getPosition().second - pos.second);
 
@@ -267,7 +261,7 @@ bool Infantry::attack(int visibility,Unit* unit2){
 	if(rowdiff ==newRange && coldiff ==newRange) valid = true;
 
 	if(valid == false){
-		printf("Infantry cannot attack that Unit. Infantry's current range is %d\n", range);
+		printf("Infantry cannot attack that Unit\n");
 		return false;
 	}
 	
@@ -329,19 +323,15 @@ bool Cavalry::move(vector<vector<char> >grid,pair<int,int>des, int row, int col)
 //the whole column above or below of its current position
 bool Cavalry::attack(int visibility,Unit* unit2){
 	bool valid = false;
-	int newRange = this->range-visibility;
-	if(newRange < 1){
-		printf("Cant attack due to visibility\n");
-		return false;
-	}
+
 	int rowdiff = abs(unit2->getPosition().first - pos.first);
 	int coldiff = abs(unit2->getPosition().second - pos.second);
 
 	//valid moves
-	if(rowdiff ==0 && coldiff <=newRange) valid = true;
+	if(rowdiff ==0 && coldiff <=range) valid = true;
 
 	if(valid == false){
-		printf("Cavalry cannot attack that Unit. Cavalry current range is %d\n", range);
+		printf("Cavalry cannot attack that Unit\n");
 		return false;
 	}
 	
@@ -358,7 +348,7 @@ bool Cavalry::attack(int visibility,Unit* unit2){
 Biker::Biker(int row, int col){
 	this->health = 1500;
 	this->damage = 425;
-	this->range = 1;
+	this->range = 2;
 	this->pos = make_pair(row,col);
 	this->moveCheck = false;
 	this->deadCount =0;
@@ -394,7 +384,7 @@ bool Biker::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
 	if(rowdiff <=6 && coldiff <=6) valid = true;
 	
 	if(valid == false){
-		printf("Invalid destination. Biker goes up to 8 tiles in any direction from its current position\n");
+		printf("Invalid destination. Biker goes up to 6 tiles in any direction from its current position\n");
 		return false;
 	}
 	
@@ -409,11 +399,7 @@ bool Biker::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
 // 1 tile left, right, up, or down
 bool Biker::attack(int visibility, Unit* unit2){
 	bool valid = false;
-	int newRange = this->range-visibility;
-	if(newRange != 1){
-		printf("Cant attack due to visibility\n");
-		return false;
-	}
+	int newRange = visibility;
 	int rowdiff = abs(unit2->getPosition().first - pos.first);
 	int coldiff = abs(unit2->getPosition().second - pos.second);
 
@@ -421,7 +407,7 @@ bool Biker::attack(int visibility, Unit* unit2){
 	if(rowdiff ==0 && coldiff ==newRange) valid = true;
 	if(rowdiff ==newRange &&coldiff ==0) valid = true;
 	if(valid == false){
-		printf("Biker cannot attack that Unit. Biker's current range is %d\n", range);
+		printf("Biker cannot attack that Unit\n");
 		return false;
 	}
 	
