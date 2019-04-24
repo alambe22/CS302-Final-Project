@@ -44,12 +44,12 @@ Base::Base(int row, int col){
 	this->isDead=false;
 	this->attackCheck = false;
 }
-
+//does not move
 bool Base::move(vector<vector<char> >grid,pair<int,int> des, int row, int col){
 	printf("The base does not move at any point in the game\n");
 	return false;
 }
-
+//does not attack
 bool Base::attack(int visibility, Unit*){
 	printf("The base does not attack at any point in the game\n");
 	return false;
@@ -59,7 +59,7 @@ bool Base::attack(int visibility, Unit*){
 Sniper::Sniper(int row, int col){
 	this->health = 2500;
 	this->damage = 550;
-	this->range = 7;
+	this->range = 5;
 	this->pos = make_pair(row,col);
 	this->moveCheck = false;
 	this->deadCount =0;
@@ -67,7 +67,7 @@ Sniper::Sniper(int row, int col){
 	this->attackCheck = false;
 
 }
-
+//any direction including diagonal but only one tile
 bool Sniper::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
 	bool valid = false;
 	if(grid[des.first][des.second] != '_'){
@@ -100,11 +100,14 @@ bool Sniper::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
 	moveCheck = true;
 	return true;
 }
-
+//any direction including diagonal with a range up to 5
 bool Sniper::attack(int visibility, Unit* unit2){
 	bool valid = false;
 	int newRange = this->range-visibility;
-
+	if(newRange < 1){
+		printf("Cant attack due to visibility\n");
+		return false;
+	}
 	int rowdiff = abs(unit2->getPosition().first - pos.first);
 	int coldiff = abs(unit2->getPosition().second - pos.second);
 
@@ -141,6 +144,7 @@ Artillery::Artillery(int row, int col){
 
 }
 
+//moves 3 tiles at a time ONLY
 bool Artillery::move(vector<vector<char> >grid,pair<int,int> des, int row, int col){
 	bool valid = false;
 	if(grid[des.first][des.second] != '_'){
@@ -172,6 +176,7 @@ bool Artillery::move(vector<vector<char> >grid,pair<int,int> des, int row, int c
 	return true;
 }
 
+//attacks in any direction including diagonal at a range of 3 or 4 ONLY
 bool Artillery::attack(int visibility,Unit* unit2){
 	bool valid = false;
 	int newRange = this->range-visibility;
@@ -214,7 +219,7 @@ Infantry::Infantry(int row, int col){
 	this->attackCheck = false;
 
 }
-
+//moves only left, right, up, and down 1 tile
 bool Infantry::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
 	bool valid = false;
 	if(grid[des.first][des.second] != '_'){
@@ -247,6 +252,7 @@ bool Infantry::move(vector<vector<char> >grid,pair<int,int>des, int row, int col
 		return true;
 }
 
+//diagonal attacks ONLY 1 tile
 bool Infantry::attack(int visibility,Unit* unit2){
 	bool valid = false;
 	int newRange = this->range-visibility;
@@ -288,7 +294,7 @@ Cavalry::Cavalry(int row, int col,int columnsize){
 	this->attackCheck = false;
 
 }
-
+// 1 tile left or right only
 bool Cavalry::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
 	bool valid = false;
 	if(grid[des.first][des.second] != '_'){
@@ -307,7 +313,7 @@ bool Cavalry::move(vector<vector<char> >grid,pair<int,int>des, int row, int col)
 	if(rowdiff ==0 && coldiff ==1) valid = true;
 
 	if(valid == false){
-		printf("Invalid destination. Cavalry only goes 1 tile up or down its current position\n");
+		printf("Invalid destination. Cavalry only goes 1 tile left or right its current position\n");
 		return false;
 	}
 	
@@ -320,9 +326,14 @@ bool Cavalry::move(vector<vector<char> >grid,pair<int,int>des, int row, int col)
 		return true;
 }
 
+//the whole column above or below of its current position
 bool Cavalry::attack(int visibility,Unit* unit2){
 	bool valid = false;
 	int newRange = this->range-visibility;
+	if(newRange < 1){
+		printf("Cant attack due to visibility\n");
+		return false;
+	}
 	int rowdiff = abs(unit2->getPosition().first - pos.first);
 	int coldiff = abs(unit2->getPosition().second - pos.second);
 
@@ -356,6 +367,7 @@ Biker::Biker(int row, int col){
 
 }
 
+//can move up to  6 tiles in any direction including diagonal
 bool Biker::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
 	bool valid = false;
 	if(grid[des.first][des.second] != '_'){
@@ -377,9 +389,9 @@ bool Biker::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
 	}
 	
 	//valid moves
-	if(rowdiff ==0 && coldiff <=8) valid = true;
-	if(rowdiff <=8 && coldiff ==0) valid = true;
-	if(rowdiff <=8 && coldiff <=8) valid = true;
+	if(rowdiff ==0 && coldiff <=6) valid = true;
+	if(rowdiff <=6 && coldiff ==0) valid = true;
+	if(rowdiff <=6 && coldiff <=6) valid = true;
 	
 	if(valid == false){
 		printf("Invalid destination. Biker goes up to 8 tiles in any direction from its current position\n");
@@ -394,7 +406,7 @@ bool Biker::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
 		moveCheck = true;
 		return true;
 }
-
+// 1 tile left, right, up, or down
 bool Biker::attack(int visibility, Unit* unit2){
 	bool valid = false;
 	int newRange = this->range-visibility;

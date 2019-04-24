@@ -6,7 +6,7 @@ using namespace std;
 int main(){
 
 	Sniper i(5,5);
-	Base b(5,11);
+	Base b(5,9);
 	Unit *unit1 = &i;
 	Unit *unit2 = &b;
 	pair<int,int> des;
