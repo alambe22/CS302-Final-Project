@@ -17,7 +17,7 @@ class Unit{
 		void setAttack(bool);
 		pair<int,int> getPosition();
 		void print();
-		virtual bool move(vector<vector<char> >,pair<int,int>,int,int) =0; //grid vector, destination position, rowsize, column size
+		virtual bool move(vector<vector<pair<char,bool> > >,pair<int,int>,int,int) =0; //grid vector, destination position, rowsize, column size
 		virtual bool attack(int, Unit*)   =0; //visibility, the unit being attacked
 		int deadCount;
 		bool isDead;
@@ -33,42 +33,42 @@ class Unit{
 
 class Base : public Unit{
 	public:
-		bool move(vector<vector<char> >,pair<int,int>, int, int);
+		bool move(vector<vector<pair<char,bool> > >,pair<int,int>, int, int);
 		bool attack(int, Unit*);
 		Base(int,int);
 };
 
 class Sniper : public Unit{
 	public:	
-		bool move(vector<vector<char> >,pair<int,int>, int, int);
+		bool move(vector<vector<pair<char,bool> > >,pair<int,int>, int, int);
 		bool attack(int, Unit*);
 		Sniper(int, int);
 };
 
 class Artillery : public Unit{
 	public:	
-		bool move(vector<vector<char> >,pair<int,int>, int , int);
+		bool move(vector<vector<pair<char,bool> > >,pair<int,int>, int , int);
 		bool attack(int, Unit*);
 		Artillery(int,int);
 };
 
 class Infantry : public Unit{
 	public:	
-		bool move(vector<vector<char> >,pair<int,int>, int, int);
+		bool move(vector<vector<pair<char,bool> > >,pair<int,int>, int, int);
 		bool attack(int,Unit*);
 		Infantry(int, int);
 };
 
 class Cavalry : public Unit{
 	public:	
-		bool move(vector<vector<char> >,pair<int,int>, int, int);
+		bool move(vector<vector<pair<char,bool> > >,pair<int,int>, int, int);
 		bool attack(int,Unit*);
 		Cavalry(int, int, int);
 };
 
 class Biker : public Unit{
 	public:
-		bool move(vector<vector<char> >,pair<int,int>, int, int);
+		bool move(vector<vector<pair<char,bool> > >,pair<int,int>, int, int);
 		bool attack(int,Unit*);
 		Biker(int, int);
 };

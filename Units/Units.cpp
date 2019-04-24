@@ -45,7 +45,7 @@ Base::Base(int row, int col){
 	this->attackCheck = false;
 }
 //does not move
-bool Base::move(vector<vector<char> >grid,pair<int,int> des, int row, int col){
+bool Base::move(vector<vector<pair<char,bool> > >grid,pair<int,int> des, int row, int col){
 	printf("The base does not move at any point in the game\n");
 	return false;
 }
@@ -68,9 +68,9 @@ Sniper::Sniper(int row, int col){
 
 }
 //any direction including diagonal but only one tile
-bool Sniper::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
+bool Sniper::move(vector<vector<pair<char,bool> > >grid,pair<int,int>des, int row, int col){
 	bool valid = false;
-	if(grid[des.first][des.second] != '_'){
+	if(grid[des.first][des.second].first != '_'){
 		printf("Cannot move! A unit is already there\n");
 		return false;
 	}
@@ -142,9 +142,9 @@ Artillery::Artillery(int row, int col){
 }
 
 //moves 3 tiles at a time ONLY
-bool Artillery::move(vector<vector<char> >grid,pair<int,int> des, int row, int col){
+bool Artillery::move(vector<vector<pair<char,bool> > >grid,pair<int,int> des, int row, int col){
 	bool valid = false;
-	if(grid[des.first][des.second] != '_'){
+	if(grid[des.first][des.second].first != '_'){
 		printf("Cannot move! A unit is already there\n");
 		return false;
 	}
@@ -217,9 +217,9 @@ Infantry::Infantry(int row, int col){
 
 }
 //moves only left, right, up, and down 1 tile
-bool Infantry::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
+bool Infantry::move(vector<vector<pair<char,bool> > >grid,pair<int,int>des, int row, int col){
 	bool valid = false;
-	if(grid[des.first][des.second] != '_'){
+	if(grid[des.first][des.second].first != '_'){
 		printf("Cannot move! A unit is already there\n");
 		return false;
 	}
@@ -289,9 +289,9 @@ Cavalry::Cavalry(int row, int col,int columnsize){
 
 }
 // 1 tile left or right only
-bool Cavalry::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
+bool Cavalry::move(vector<vector<pair<char,bool> > >grid,pair<int,int>des, int row, int col){
 	bool valid = false;
-	if(grid[des.first][des.second] != '_'){
+	if(grid[des.first][des.second].first != '_'){
 		printf("Cannot move! A unit is already there\n");
 		return false;
 	}
@@ -358,9 +358,9 @@ Biker::Biker(int row, int col){
 }
 
 //can move up to  6 tiles in any direction including diagonal
-bool Biker::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
+bool Biker::move(vector<vector<pair<char,bool> > >grid,pair<int,int>des, int row, int col){
 	bool valid = false;
-	if(grid[des.first][des.second] != '_'){
+	if(grid[des.first][des.second].first != '_'){
 		printf("Cannot move! A unit is already there\n");
 		return false;
 	}
