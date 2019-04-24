@@ -1,3 +1,6 @@
+//Tom Hills (jhills)
+
+//see corresponding cpp file for more information
 
 #include <string>
 #include <SDL2/SDL.h>
@@ -5,6 +8,7 @@
 #include "../../caseyChallenge8/Map.h"
 
 using namespace std;
+
 bool init();
 
 SDL_Texture* loadTexture();
