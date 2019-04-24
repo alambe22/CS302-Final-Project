@@ -1,15 +1,22 @@
 //Final Project: SDL portion
 
-//Tom Hills (jhills)
+//Creator: Tom Hills (jhills)
 
-//
+//Description:
+//This program uses two pieces of information to draw the gameboard in an SDL window:
+//1) weather/time/terrain information within Map class
+//2) 2d vector of chars within main.cpp which holds the gameboard locations of the units
+//First, the program determines what weather/time/terrain graphic to draw in the window using a viewport. The viewport positions...
+//...correspond to the elements listed in the "map" member of Map class. Lastly, the code goes through the 2d vector of chars...
+//...(created and passed from main.cpp) which holds the positions of the units within the gameboard. These are also printed using...
+//...viewports, but the size is only "1/4 * tile viewport size" and is aligned with the center, but sits ont he bottom of the tile. 
+
 #include "cbc_library.h"
 #include <ctime>
 #include <cstdlib>
 #include <cstdio>
 #include <string>
 #include <SDL2/SDL.h> //compile: g++ -w -lSDL2 -o challenge08 challenge08.cpp
-//#include <SDL2/SDL_image.h>
 
 using namespace std;
 
@@ -36,6 +43,8 @@ using namespace std;
 	SDL_Rect viewport;
 
 //FUNCTIONS-----------------------------------------------------------------------------------------------------------------
+
+//initializes game window and texture renderer objects
 bool init()
 {
 	//Initialize SDL 
@@ -85,6 +94,7 @@ bool init()
 	return true;
 }
 
+//creates new texture and loads BMP images information into it from a surface
 SDL_Texture* loadTexture()
 {
     //The final texture
@@ -116,7 +126,6 @@ SDL_Texture* loadTexture()
 }
 
 //loads texture with BMP image passed in path
-//NOTE: passing a copy of gTexture pointer should be ok because the same memory address should be referenced in both copies. 
 bool loadMedia() 
 {
     //Load BMP texture
@@ -131,6 +140,7 @@ bool loadMedia()
 	return true;
 }
 
+//frees all SDL related objects
 void close()
 {
 	//Free loaded image
@@ -150,9 +160,6 @@ void close()
 //builds and renders one element from map to corresponding viewport in window
 void buildMapTileViewport(int row, int col, Map &m)
 {
-//NOTE: Made a HUGE mistake with integer division...see commented out code below == () portion is ALWAYS ZERO 
-//	viewport.x = ( col / m.map[row].size() ) * SCREEN_WIDTH;
-	
 	//assign dimensions to viewport
 	viewport.x = ( col * SCREEN_WIDTH ) / m.map[row].size();
 	viewport.y = ( row * SCREEN_HEIGHT ) / m.map.size();
@@ -164,8 +171,7 @@ void buildMapTileViewport(int row, int col, Map &m)
 	SDL_RenderCopy( gRenderer, gTexture, NULL, NULL );
 }
 
-//chooses picture based on map parameters
-//NOTE: passing map object because I weather, time, etc to choose the picture
+//chooses weather and time picture based on map parameters
 void chooseMapTileToDraw(Map &m, const string &terrain)
 {
 	//get weather and time from map
@@ -195,7 +201,7 @@ void chooseMapTileToDraw(Map &m, const string &terrain)
 	else if (weather == "windy" && time == "night") {path = "Images/windy/night/" + terrain; return;}
 }
 
-//renders icons to game window that correspond to the current map configuration 
+//draws tiles to game window that correspond to the current map configuration 
 void displayWeatherTimeTerrain(Map &m)
 {
 	for (int row = 0; row < m.map.size(); ++row)
@@ -299,7 +305,8 @@ void buildUnitViewport(int row, int col, vector<vector<char> > &v)
 //draws units if present in corresponding tile
 void displayUnits(vector <vector<char> > &v)
 {
-    for (int row = 0; row < v.size(); ++row)
+    //Runs through 2d vector of chars holding unit positions and draws them in correct terrain tiles
+	for (int row = 0; row < v.size(); ++row)
     {
         for (int col = 0; col < v[row].size(); ++col)
         {
@@ -408,66 +415,7 @@ void displayUnits(vector <vector<char> > &v)
     }
 }
 
-
-/*int main (int argc, char *args[])
-{
-	//create game board
-//	srand(time(NULL));//put this back later when I want random maps
-	Map m;
-	m.resize(10,10);
-	m.print();
-	
-//TEST
-//string test;
-
-	//Start up SDL and create window
-    if( !init() )
-    {
-        printf( "Failed to initialize!\n" );
-    }
-    
-	else
-    {
-		//game loop boolean
-		bool quit = false;
-
-		//Event handler
-		SDL_Event event;
-
-		//game loop
-		while ( !quit )
-		{
-			//Handle events on queue
-			while( SDL_PollEvent( &event ) != 0 )
-			{
-				//User requests quit
-				if( event.type == SDL_QUIT )
-				{
-					quit = true;
-				}
-			}
-			
-//cout << "Blah me:\n";
-//cin >> test;
-//cout << "You entered: " << test << endl;
-
-			//Clear screen
-			SDL_RenderClear( gRenderer );
-
-			//displays a grid of icons representing the current map configuration
-			displayWeatherTimeTerrain( m );
-
-			//Update screen
-			SDL_RenderPresent( gRenderer );
-		}
-    }
-
-    //Free resources and close SDL
-    close();
-
-    return 0;
-}*/
-
+//helper function to allow one function call instead of 4 each time the gameboard has changed and needs to be redrawn
 void display( Map &m, vector<vector<char> > &v )
 {
 	SDL_RenderClear( gRenderer );
