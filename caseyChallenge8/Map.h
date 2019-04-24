@@ -26,6 +26,6 @@ public:
 	string getTime() const {return times[t];}							//get the current time
 	int setTime(string time);											//set the time
 	void changeTime();													//change the time
-	int visibility(int row, int col) const;								//the visibility at position row, col
+	int visibility(int row, int col, int range);					//the visibility at position row, col
 	void print(vector< vector<char> > &units);
 };

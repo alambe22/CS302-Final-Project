@@ -40,8 +40,7 @@ void Map::generateMap(PerlinNoise *pn){
 	}
 }
 //how far a unit can see based on the terrain, weather, and time of day
-int Map::visibility(int r, int c) const{
-	int range = 5;		//base range
+int Map::visibility(int r, int c, int range){
 	float tMod = 0;		//terrain modifier
 	float wMod = 0;		//weather modifier
 	float dMod = 0;		//daylight modifier
@@ -145,5 +144,5 @@ void Map::print(vector< vector<char> > &units){
 		}
 		cout << endl;
 	}
-	cout << "\e[0" << endl;
+	//cout << "\e[0" << endl;
 }
