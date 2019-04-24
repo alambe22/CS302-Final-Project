@@ -24,10 +24,13 @@ bool Unit:: getMove(){return moveCheck;}
 
 void Unit:: setMove(bool set){moveCheck = set;}
 
+bool Unit:: getAttack(){return attackCheck;}
+
+void Unit:: setAttack(bool attack){attackCheck = attack;}
 
 void Unit::print(){
 
-	printf("Unit Status: \nHealth: %d\nDamage: %d\nRange: %d\nCurrent Position: %d,%d\nMove: %d\nisDead: %d\nDead Count: %d\n", health, damage, range,pos.first,pos.second, moveCheck, isDead, deadCount);
+	printf("Unit Status: \nHealth: %d\nDamage: %d\nRange: %d\nCurrent Position: %d,%d\nMove: %d\nAttack: %d\nisDead: %d\nDead Count: %d\n", health, damage, range,pos.first,pos.second, moveCheck, attackCheck, isDead, deadCount);
 }
 //*****UNIT -----> BASE*******
 
@@ -39,6 +42,7 @@ Base::Base(int row, int col){
 	this->moveCheck = false;
 	this->deadCount = 0;
 	this->isDead=false;
+	this->attackCheck = false;
 }
 
 bool Base::move(vector<vector<char> >grid,pair<int,int> des, int row, int col){
@@ -60,6 +64,8 @@ Sniper::Sniper(int row, int col){
 	this->moveCheck = false;
 	this->deadCount =0;
 	this->isDead=false;
+	this->attackCheck = false;
+
 }
 
 bool Sniper::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
@@ -117,7 +123,7 @@ bool Sniper::attack(int visibility, Unit* unit2){
 		unit2->setHealth(newHealth);
 	}
 	if(unit2->getHealth() <=0) unit2->isDead= true;
-
+	attackCheck = true;
 	return true;
 }
 
@@ -131,6 +137,8 @@ Artillery::Artillery(int row, int col){
 	this->moveCheck = false;
 	this->deadCount =0;
 	this->isDead = false;
+	this->attackCheck = false;
+
 }
 
 bool Artillery::move(vector<vector<char> >grid,pair<int,int> des, int row, int col){
@@ -189,7 +197,7 @@ bool Artillery::attack(int visibility,Unit* unit2){
 		unit2->setHealth(newHealth);
 	}
 	if(unit2->getHealth() <=0) unit2->isDead= true;
-
+	attackCheck = true;
 	return true;
 }
 	
@@ -203,6 +211,8 @@ Infantry::Infantry(int row, int col){
 	this->moveCheck = false;
 	this->deadCount =0;
 	this->isDead =false;
+	this->attackCheck = false;
+
 }
 
 bool Infantry::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
@@ -260,7 +270,7 @@ bool Infantry::attack(int visibility,Unit* unit2){
 		unit2->setHealth(newHealth);
 	}
 	if(unit2->getHealth() <=0) unit2->isDead= true;
-
+	attackCheck = true;
 	return true;
 
 }
@@ -275,6 +285,8 @@ Cavalry::Cavalry(int row, int col,int columnsize){
 	this->moveCheck = false;
 	this->deadCount =0;
 	this->isDead=false;
+	this->attackCheck = false;
+
 }
 
 bool Cavalry::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
@@ -327,7 +339,7 @@ bool Cavalry::attack(int visibility,Unit* unit2){
 		unit2->setHealth(newHealth);
 	}
 	if(unit2->getHealth() <=0) unit2->isDead= true;
-
+	attackCheck = true;
 	return true;
 }
 
@@ -340,6 +352,8 @@ Biker::Biker(int row, int col){
 	this->moveCheck = false;
 	this->deadCount =0;
 	this->isDead =false;
+	this->attackCheck = false;
+
 }
 
 bool Biker::move(vector<vector<char> >grid,pair<int,int>des, int row, int col){
@@ -404,11 +418,7 @@ bool Biker::attack(int visibility, Unit* unit2){
 		unit2->setHealth(newHealth);
 	}
 	if(unit2->getHealth() <=0) unit2->isDead= true;
-
-	return true;
-
-
-	
+	attackCheck = true;
 	return true;
 }
 
