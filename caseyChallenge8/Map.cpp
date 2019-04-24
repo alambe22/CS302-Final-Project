@@ -49,7 +49,7 @@ int Map::visibility(int r, int c, int range){
 		case 'D': tMod = 0.5; break;
 		case 'P': tMod = 0.75; break;
 		case 'F': tMod = 0.25; break;
-		case 'M': tMod = 1.5; break;
+		case 'M': tMod = 1.25; break;
 	}
 	switch(w){
 		case 0: wMod = 1.0; break;
