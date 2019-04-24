@@ -8,11 +8,11 @@ SNIPER
 -Attack: attack any direction including diagonal
 -Health: 2500
 -Damage: 550
--Range:  up to 7 tiles
+-Range:  up to 5 tiles
 
 ARTILLERY
 -Movement: move 3 tiles only in adjacent direction 
--Attack: splash damage in a 2x2 area adjacent above to its current position
+-Attack: attacks in any direction in range of 3 or 4 from the current position ONLY
 -Health: 6000
 -Damage: 250 to each tile in the 2x2 area
 -Range: 1 tiles from its current position
@@ -32,7 +32,7 @@ CAVALRY
 -Range: length of row
 
 BIKER
--Movement: move up to 8 tiles any  direction including diagonal
+-Movement: move up to 6 tiles any  direction including diagonal
 -Attack: any adjacent direction 1 tile away
 -Health: 1500
 -Damage: 425

@@ -13,6 +13,8 @@ class Unit{
 		int getDamage();
 		bool getMove();
 		void setMove(bool);
+		bool getAttack();
+		void setAttack(bool);
 		pair<int,int> getPosition();
 		void print();
 		virtual bool move(vector<vector<char> >,pair<int,int>,int,int) =0; //grid vector, destination position, rowsize, column size
@@ -25,6 +27,7 @@ class Unit{
 		int damage;
 		int range;
 		bool moveCheck;
+		bool attackCheck;
 
 };
 
