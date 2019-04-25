@@ -199,7 +199,7 @@ int main(int argc, char* argv[]){
 										cin.ignore();
 									}
 									cout << "Please enter destination as row and columns: ";
-								}while(!(cin >> des.first >> des.second));
+								}while(!(cin >> des.first >> des.second) || des.first <0 || des.first >9 || des.second < 0 || des.second > 9);
 								src = players[curPlayer].units[choice]->getPosition();
 
 								cout << "Unit range on selected tile: " << gameboard.visibility(des.first, des.second,players[curPlayer].units[choice]->getRange())<< '\n';
@@ -273,7 +273,7 @@ int main(int argc, char* argv[]){
 						cout << i << ". " << unitNames[i] << '\n';
 					}
 					cout << "Or enter 8 for all units.\n";
-					if(cin >> choice){
+					if(!(cin >> choice) && choice >0 && choice <= 8){
 						if(choice < 8){
 							if(players[curPlayer].units[choice]->isDead){
 								cout << "This " << unitNames[choice] << " is dead, and a new recruit will arrive in " << 5 - players[curPlayer].units[choice]->deadCount << " turns\n";
