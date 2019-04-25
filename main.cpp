@@ -23,6 +23,7 @@ class Player{
 	public:
 		Player();
 		Player(int, vector<vector<pair<char,bool> > >&);
+		~Player();
 		string name;
 		vector<Unit*> units;
 };
@@ -53,7 +54,12 @@ Player::Player(int col, vector<vector<pair<char, bool> > >& unitGrid){
 	units.emplace_back(new Base(5, col));
 	unitGrid[5][col].first = 'b';
 	unitGrid[5][col].second = curPlayer;
+}
 
+Player::~Player(){
+	for(unsigned int i=0; i< 8; i++){
+		delete units[i];
+	}
 }
 
 //Helper functions to make cleaner code
