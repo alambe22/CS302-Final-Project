@@ -65,8 +65,8 @@ int main(int argc, char* argv[]){
 	pair<int, int> des, src;
 	vector<vector<pair<char,bool> > > unitGrid(10, vector<pair<char, bool> >(10,make_pair('_', false)));
 	char charChoice;
-	const char unitSymbols[8] = {'S', 'C', 'B', 'I', 'A', 'I', 'C', 'b'};
-	const string unitNames[8] = {"Sniper", "Cavalry", "Biker", "Infantry", "Artillery", "Infantry", "Cavalry", "Base"};
+	const char unitSymbols[8] = {'S', 'C', 'B', 'I', 'I', 'C', 'A', 'b'};
+	const string unitNames[8] = {"Sniper", "Cavalry", "Biker", "Infantry", "Infantry", "Cavalry", "Artillery", "Base"};
 
 	if( !init()){
 		printf("Failed to initialize!\n");
@@ -100,13 +100,13 @@ int main(int argc, char* argv[]){
 					if(players[curPlayer].units[i]->deadCount ==5){
 						while(true){
 							cout << "A new " << unitNames[i] << " is ready to be placed. It will be placed in the same column as your base. Please enter which row: \n";
-							if(!(cin >> des.second) || des.second <0 || des.second > 9){
+							if(!(cin >> des.first) || des.first <0 || des.first > 9){
 								cin.clear();
 								cin.ignore();
 								cout << "Invalid tile\n";
 								continue;
 							}
-							des.first = ((curPlayer==0)?(0):(9));
+							des.second = ((curPlayer==0)?(0):(9));
 							if(unitGrid[des.first][des.second].first !='_')
 								cout << "Unit already there.\n";
 							else{
