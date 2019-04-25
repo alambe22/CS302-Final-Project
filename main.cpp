@@ -273,7 +273,7 @@ int main(int argc, char* argv[]){
 						cout << i << ". " << unitNames[i] << '\n';
 					}
 					cout << "Or enter 8 for all units.\n";
-					if((cin >> choice) && choice >0 && choice <= 8){
+					if((cin >> choice) && choice >=0 && choice <= 8){
 						if(choice < 8){
 							if(players[curPlayer].units[choice]->isDead){
 								cout << "This " << unitNames[choice] << " is dead, and a new recruit will arrive in " << 5 - players[curPlayer].units[choice]->deadCount << " turns\n";
