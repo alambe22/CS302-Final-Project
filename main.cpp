@@ -25,7 +25,6 @@ class Player{
 		Player(int, vector<vector<pair<char,bool> > >&);
 		string name;
 		vector<Unit*> units;
-		set<int> deadUnits;
 };
 
 Player::Player(int col, vector<vector<pair<char, bool> > >& unitGrid){
@@ -68,12 +67,10 @@ int main(int argc, char* argv[]){
 	char charChoice;
 	const char unitSymbols[8] = {'S', 'C', 'B', 'I', 'A', 'I', 'C', 'b'};
 	const string unitNames[8] = {"Sniper", "Cavalry", "Biker", "Infantry", "Artillery", "Infantry", "Cavalry", "Base"};
-	set<int>::iterator it;
 
 	if( !init()){
 		printf("Failed to initialize!\n");
 	}else{
-
 		bool quit = false;
 
 		SDL_Event event;
@@ -98,58 +95,62 @@ int main(int argc, char* argv[]){
 
 			cout << '\n' << players[curPlayer].name << "\'s turn\n";
 
-			if(players[curPlayer].deadUnits.size() > 0){
-				for(it = players[curPlayer].deadUnits.begin(); it != players[curPlayer].deadUnits.end(); it++){
-					if(players[curPlayer].units[*it]->deadCount ==5){
+			for(i=0; i< 7; i++){
+				if(players[curPlayer].units[i]->isDead){
+					if(players[curPlayer].units[i]->deadCount ==5){
 						while(true){
-							cout << "A new " << unitNames[*it] << " is ready to be placed. Enter the cordinates where it should go. The column must be one of the first 3 on your side.\n";
-							if(!(cin >> des.first >> des.second)){
+							cout << "A new " << unitNames[i] << " is ready to be placed. It will be placed in the same column as your base. Please enter which row: \n";
+							if(!(cin >> des.second) || des.second <0 || des.second > 9){
+								cin.clear();
+								cin.ignore();
 								cout << "Invalid tile\n";
 								continue;
 							}
-
-							if(unitGrid[des.first][des.second].first != '_')
+							des.first = ((curPlayer==0)?(0):(9));
+							if(unitGrid[des.first][des.second].first !='_')
 								cout << "Unit already there.\n";
-							else if( (des.second != 0 && curPlayer ==0) || (des.second != 9 && curPlayer==1)){
-								cout << "Too far from base.\n";
-							}else{
-								delete players[curPlayer].units[*it];
-								switch(*it){
+							else{
+								delete players[curPlayer].units[i];
+								switch(i){
 									case 0:
 										players[curPlayer].units[0] = new Sniper(des.first, des.second);
 										break;
 									case 1:
-										players[curPlayer].units[1] = new Cavalry(des.first, des.second, 10);
+									case 5:
+										players[curPlayer].units[i] = new Cavalry(des.first, des.second, 10);
 										break;
 									case 2:
 										players[curPlayer].units[2] = new Biker(des.first, des.second);
 										break;
-									case 3:
-										players[curPlayer].units[3] = new Infantry(des.first, des.second);
-										break;
 									case 4:
-										players[curPlayer].units[4] = new Infantry(des.first, des.second);
-										break;
-									case 5:
-										players[curPlayer].units[5] = new Cavalry(des.first, des.second, 10);
+									case 3:
+										players[curPlayer].units[i] = new Infantry(des.first, des.second);
 										break;
 									case 6:
 										players[curPlayer].units[6] = new Artillery(des.first, des.second);
+										break;
 								}
-								unitGrid[des.first][des.second].first = unitSymbols[*it];
+								unitGrid[des.first][des.second].first = unitSymbols[i];
 								unitGrid[des.first][des.second].second = curPlayer;
-								it = players[curPlayer].deadUnits.erase(it);
+								display(gameboard, unitGrid);
 								break;
 							}
 						}
 					}else{
-						players[curPlayer].units[*it]->deadCount++;
+						players[curPlayer].units[i]->deadCount++;
 					}
 				}
 			}
+
 			choice = -1;
-			cout << "\nOptions:\n 1. Move Units\n 2. Check tile\n 3. Check unit\n 4. Attack\n 5. End turn\n 6. Quit\n Choice: ";
-			cin >> choice;
+			do{
+				if(!cin.good()){
+					cin.clear();
+					cin.ignore();
+				}
+				cout << "\nOptions:\n 1. Move Units\n 2. Check tile\n 3. Check unit\n 4. Attack\n 5. End turn\n 6. Quit\n Choice: ";
+
+			}while(!(cin >> choice)|| choice >7 || choice < 0 );
 
 			//Menu
 			switch(choice){
@@ -166,6 +167,9 @@ int main(int argc, char* argv[]){
 					if((cin >> choice) && choice < 7 && choice >=0){
 						if(players[curPlayer].units[choice]->getMove()){
 							cout << "This unit has already been moved this turn.\n";
+							break;
+						}else if(players[curPlayer].units[choice]->isDead){
+							cout << "This unit is currently dead and cannot move.\n";
 							break;
 						}else{
 							cout << "Unit: " << unitNames[choice];
@@ -190,6 +194,10 @@ int main(int argc, char* argv[]){
 							}
 							while(true){
 								do{
+									if(cin.fail()){
+										cin.clear();
+										cin.ignore();
+									}
 									cout << "Please enter destination as row and columns: ";
 								}while(!(cin >> des.first >> des.second));
 								src = players[curPlayer].units[choice]->getPosition();
@@ -212,6 +220,8 @@ int main(int argc, char* argv[]){
 							}
 						}
 					}else{
+						cin.clear();
+						cin.ignore();
 						cout << "Invalid unit.\n";
 					}
 					display(gameboard, unitGrid); //TOM: added this
@@ -219,6 +229,8 @@ int main(int argc, char* argv[]){
 				case 2:
 					cout << "Which tile (enter rows and columns):\n";
 					if(!(cin >> des.first >> des.second) ||des.first >10 || des.second>10 || des.first<0 || des.second<0){
+						cin.clear();
+						cin.ignore();
 						cout << "Invalid tile or out of bounds\n";
 					}else{
 						cout << "Attack Ranges for Units:\n";
@@ -285,21 +297,26 @@ int main(int argc, char* argv[]){
 								}
 							}
 						}
+					}else{
+						cin.clear();
+						cin.ignore();
 					}
 					break;
 				case 4:
 					//Attack
 					cout << "Which unit do you want to attack with?\n";
 					for(i=0; i<7; i++){
-						if(players[curPlayer].units[i]->isDead)
+						if(players[curPlayer].units[i]->isDead || players[curPlayer].units[i]->getAttack())
 							continue;
 						cout << i << ". " << unitNames[i] << '\n';
 					}
-					if(!(cin >> unit) || unit >7 || unit <0){
+					if(!(cin >> unit) || unit >7 || unit <0 || players[curPlayer].units[unit]->getAttack() || players[curPlayer].units[unit]->isDead){
 						cout << "Invalid unit.\n";
+						cin.clear();
+						cin.ignore();
 						break;
 					}
-					src = players[!curPlayer].units[unit]->getPosition();
+					src = players[curPlayer].units[unit]->getPosition();
 					
 					cout << "Which enemy unit do you want to attack?\n";
 					for(i=0; i<8; i++){
@@ -308,19 +325,22 @@ int main(int argc, char* argv[]){
 						cout << i << ". " << unitNames[i] << '\n';
 					}
 					if( !(cin >> unit2) || unit >8 || unit<0){
+						cin.clear();
+						cin.ignore();
 						cout << "Invalid unit.\n";
 						break;
 					}
-					if(players[curPlayer].units[unit]->attack(gameboard.visibility(src.first, src.second, players[curPlayer].units[unit]->getRange()),players[curPlayer+1%2].units[unit2])){
+					if(players[curPlayer].units[unit]->attack(gameboard.visibility(src.first, src.second, players[curPlayer].units[unit]->getRange()),players[!curPlayer].units[unit2])){
 						if(players[!curPlayer].units[unit2]->getHealth() <=0){
-							if(unit2 == 8){
+							if(unit2 == 7){
 								cout << players[!curPlayer].name << "\'s base has been overrun. Structures burn and no prisoners are taken. " << players[curPlayer].name << " has won the game!\n";
 								return 0;
 							}
+							src = players[!curPlayer].units[unit2]->getPosition();
 							cout << players[!curPlayer].name << "\'s " << unitNames[unit2] << " has been destroyed.\n";
 							players[!curPlayer].units[unit2]->isDead = true;
 							unitGrid[src.first][src.second].first = '_';
-							players[!curPlayer].deadUnits.insert(unit2);
+							display(gameboard, unitGrid); //TOM: added this
 						}
 					}
 					break;
@@ -335,7 +355,7 @@ int main(int argc, char* argv[]){
 					display(gameboard, unitGrid);
 					for(i=0; i<7; i++){
 						players[curPlayer].units[i]->setMove(false);
-						players[curPlayer].units[i]->setMove(false);
+						players[curPlayer].units[i]->setAttack(false);
 					}
 					curPlayer = !curPlayer;
 					break;
@@ -353,9 +373,15 @@ int main(int argc, char* argv[]){
 //of 15x15, but in the future it will handle varying sizes.
 int startGame(Map& gameboard, Player* players){
 	unsigned int choice;
-
-	cout << "Input a seed (put 0 for random)?: ";
-	cin >> choice;
+	while(true){
+		cout << "Input a seed (put 0 for random)?: ";
+		if(!(cin >> choice)){
+			cin.clear();
+			cin.ignore();
+			continue;
+		}
+		break;
+	}
 
 	if(choice ==0){
 		srand(time(NULL));
