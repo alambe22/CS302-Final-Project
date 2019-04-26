@@ -8,34 +8,35 @@ SNIPER
 -Attack: attack any direction including diagonal
 -Health: 2500
 -Damage: 550
--Range:  up to 5 tiles
+-Range:  up to 6 tiles
 
 ARTILLERY
 -Movement: move 3 tiles only in adjacent direction 
--Attack: attacks in any direction in range of 3 or 4 from the current position ONLY
+-Attack: attacks in any direction in range
 -Health: 6000
 -Damage: 250 to each tile in the 2x2 area
--Range: 1 tiles from its current position
+-Range: >1 && <5 tiles
 
 INFANTRY
 -Movement: 1 tile any adjacent direction 
 -Attack: Only diagonal tiles range of 1 (forward and backward)
 -Health: 3000
 -Damage: 1100
--Range: 1 tile diagonal from its current position
+-Range: 1 tile 
 
 CAVALRY
 -Movement: 1 tiles left or right
--Attack: can damage any unit that is in the same row cavalry is in
+-Attack: can damage any one unit that is in the same column cavalry is in
 -Health: 4000
--Damage: 350 to any singular unit in that row
--Range: length of row
+-Damage: 350 to any singular unit in that column
+-Range: length of column
 
 BIKER
 -Movement: move up to 6 tiles any  direction including diagonal
 -Attack: any adjacent direction 1 tile away
 -Health: 1500
 -Damage: 425
+-Range: 1 tile
 
 
 

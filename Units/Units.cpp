@@ -9,7 +9,7 @@ using namespace std;
 
 
 //****UNIT******
-
+//base class functions defined
 int Unit::getHealth(){return health;}
 
 void Unit::setHealth(int newHealth){health = newHealth;}
@@ -32,8 +32,10 @@ void Unit::print(){
 
 	printf("Unit Status: \nHealth: %d\nDamage: %d\nRange: %d\nCurrent Position: %d,%d\nMove: %d\nAttack: %d\nisDead: %d\nDead Count: %d\n", health, damage, range,pos.first,pos.second, moveCheck, attackCheck, isDead, deadCount);
 }
-//*****UNIT -----> BASE*******
 
+//for each unit, its attributes, the attack, and move is made differently
+//*****UNIT -----> BASE*******
+//stationary unit
 Base::Base(int row, int col){
 	this->health = 20000;
 	this->range = 0;
@@ -44,12 +46,12 @@ Base::Base(int row, int col){
 	this->isDead=false;
 	this->attackCheck = false;
 }
-//does not move
+
 bool Base::move(vector<vector<pair<char,bool> > >grid,pair<int,int> des, int row, int col){
 	printf("The base does not move at any point in the game\n");
 	return false;
 }
-//does not attack
+
 bool Base::attack(int visibility, Unit*){
 	printf("The base does not attack at any point in the game\n");
 	return false;
@@ -67,9 +69,10 @@ Sniper::Sniper(int row, int col){
 	this->attackCheck = false;
 
 }
-//any direction including diagonal but only one tile
+// can move any direction  but only one tile
 bool Sniper::move(vector<vector<pair<char,bool> > >grid,pair<int,int>des, int row, int col){
 	bool valid = false;
+	//error checking for out of bounds or a unit is at destination 
 	if(grid[des.first][des.second].first != '_'){
 		printf("Cannot move! A unit is already there\n");
 		return false;
@@ -82,11 +85,12 @@ bool Sniper::move(vector<vector<pair<char,bool> > >grid,pair<int,int>des, int ro
 	int rowdiff = abs(des.first - pos.first);
 	int coldiff = abs(des.second - pos.second);
 
-	//valid moves
+	//valid moves for the unit to go any direction
 	if(rowdiff ==1 && coldiff ==1) valid = true;
 	if(rowdiff ==1 && coldiff ==0) valid =true;
 	if(rowdiff ==0 && coldiff ==1) valid =true;
 
+	//not a valid destination was given
 	if(valid == false){
 		printf("Sniper cannot move to that destination. Sniper moves 1 tile in any direction\n");
 		return false;
@@ -100,7 +104,7 @@ bool Sniper::move(vector<vector<pair<char,bool> > >grid,pair<int,int>des, int ro
 	moveCheck = true;
 	return true;
 }
-//any direction including diagonal with a base range up to 6 
+//any direction including diagonal with its range depending on the visibility parameter 
 bool Sniper::attack(int visibility, Unit* unit2){
 	bool valid = false;
 	int newRange = visibility;
@@ -108,7 +112,7 @@ bool Sniper::attack(int visibility, Unit* unit2){
 	int rowdiff = abs(unit2->getPosition().first - pos.first);
 	int coldiff = abs(unit2->getPosition().second - pos.second);
 
-	//valid moves
+	//valid moves to attack
 	if(rowdiff <=newRange && coldiff <=newRange) valid = true;
 	if(rowdiff <=newRange && coldiff ==0) valid =true;
 	if(rowdiff ==0 && coldiff <=newRange) valid =true;
@@ -118,11 +122,14 @@ bool Sniper::attack(int visibility, Unit* unit2){
 		return false;
 	}
 	
+	//performs the attack and damage to the specified unit
 	else{
 		int newHealth = unit2->getHealth() - this->damage;
 		unit2->setHealth(newHealth);
 	}
+	//if the attacked unit is dead after attack
 	if(unit2->getHealth() <=0) unit2->isDead= true;
+	
 	attackCheck = true;
 	return true;
 }
@@ -158,6 +165,7 @@ bool Artillery::move(vector<vector<pair<char,bool> > >grid,pair<int,int> des, in
 	int rowdiff = abs(des.first - pos.first);
 	int coldiff = abs(des.second - pos.second);
 	
+	//valid moves
 	if(rowdiff == 0 && coldiff == 3) valid = true;
 	if(rowdiff == 3 && coldiff == 0) valid = true;
 
@@ -165,6 +173,7 @@ bool Artillery::move(vector<vector<pair<char,bool> > >grid,pair<int,int> des, in
 		printf("Invalid move! Artillery moves 3 tiles at time in any adjacent direction to current position.\n");
 		return false;
 	}
+	//update position
 	else{
 		pos.first = des.first;
 		pos.second = des.second;
@@ -173,7 +182,7 @@ bool Artillery::move(vector<vector<pair<char,bool> > >grid,pair<int,int> des, in
 	return true;
 }
 
-//attacks in any direction including diagonal at a range of 2 or  3 or 4 ONLY
+//attacks in any direction including diagonal at a range greater than 1 and up to based on visibility paramter (min. 2)
 bool Artillery::attack(int visibility,Unit* unit2){
 	bool valid = false;
 	int newRange = visibility;
@@ -193,7 +202,7 @@ bool Artillery::attack(int visibility,Unit* unit2){
 		printf("Artillery cannot attack that Unit\n");
 		return false;
 	}
-	
+	//perform the damage on specified unit
 	else{
 		int newHealth = unit2->getHealth() - this->damage;
 		unit2->setHealth(newHealth);
@@ -249,7 +258,7 @@ bool Infantry::move(vector<vector<pair<char,bool> > >grid,pair<int,int>des, int 
 		return true;
 }
 
-//diagonal attacks ONLY 1 tile
+//diagonal attacks ONLY range depends on visibility paramter
 bool Infantry::attack(int visibility,Unit* unit2){
 	bool valid = false;
 	int newRange = visibility;
@@ -264,7 +273,8 @@ bool Infantry::attack(int visibility,Unit* unit2){
 		printf("Infantry cannot attack that Unit\n");
 		return false;
 	}
-	
+
+	//perform the attack on specified unit
 	else{
 		int newHealth = unit2->getHealth() - this->damage;
 		unit2->setHealth(newHealth);
@@ -320,7 +330,7 @@ bool Cavalry::move(vector<vector<pair<char,bool> > >grid,pair<int,int>des, int r
 		return true;
 }
 
-//the whole column above or below of its current position
+//the whole column above or below of its current position (visibility has no affect on range)
 bool Cavalry::attack(int visibility,Unit* unit2){
 	bool valid = false;
 
@@ -334,7 +344,7 @@ bool Cavalry::attack(int visibility,Unit* unit2){
 		printf("Cavalry cannot attack that Unit\n");
 		return false;
 	}
-	
+	//perform the attack on specidied unit
 	else{
 		int newHealth = unit2->getHealth() - this->damage;
 		unit2->setHealth(newHealth);
@@ -396,7 +406,7 @@ bool Biker::move(vector<vector<pair<char,bool> > >grid,pair<int,int>des, int row
 		moveCheck = true;
 		return true;
 }
-// 1 tile left, right, up, or down
+// left, right, up, or down range depends on visibility
 bool Biker::attack(int visibility, Unit* unit2){
 	bool valid = false;
 	int newRange = visibility;
@@ -410,7 +420,7 @@ bool Biker::attack(int visibility, Unit* unit2){
 		printf("Biker cannot attack that Unit\n");
 		return false;
 	}
-	
+	//perform attack on specified unit
 	else{
 		int newHealth = unit2->getHealth() - this->damage;
 		unit2->setHealth(newHealth);

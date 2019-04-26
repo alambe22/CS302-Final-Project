@@ -1,10 +1,12 @@
 /* Shivam Patel
- * Description: used inhertitance for each unit and virtual functions 
+ * Title: Unit's header file
+ * Description: used inhertitance for each unit and pure virtual functions to attack and move along with some helper functions
 */
 
 using namespace std;
 #include <iostream>
 #include <vector>
+//base class
 class Unit{
 	public:
 		int getHealth();
@@ -19,7 +21,7 @@ class Unit{
 		void print();
 		virtual bool move(vector<vector<pair<char,bool> > >,pair<int,int>,int,int) =0; //grid vector, destination position, rowsize, column size
 		virtual bool attack(int, Unit*)   =0; //visibility, the unit being attacked
-		int deadCount;
+		int deadCount; //keep track of how many turns unit has been dead before it can respawn
 		bool isDead;
 	protected:
 		pair<int,int>pos;
@@ -31,6 +33,9 @@ class Unit{
 
 };
 
+//derived classes
+//each unit will have a different movement and attack style 
+//in each constructor of these units, the row and column the unit will be placed on the map is passed in
 class Base : public Unit{
 	public:
 		bool move(vector<vector<pair<char,bool> > >,pair<int,int>, int, int);
